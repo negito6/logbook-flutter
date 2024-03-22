@@ -22,6 +22,10 @@ class Tag {
     required this.name,
     required this.category,
   });
+
+  static String createTagTableStatement() {
+    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER)';
+  }
 }
 
 Future<List<Tag>> getTags(database) async {

@@ -20,11 +20,11 @@ void main() async {
     // `path` package is best practice to ensure the path is correctly
     // constructed for each platform.
     join(await getDatabasesPath(), 'logbook_database.db'),
-  
+
     onCreate: (db, version) {
       // Run the CREATE TABLE statement on the database.
       return db.execute(
-        'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER)',
+        Tag.createTagTableStatement(),
       );
     },
     // Set the version. This executes the onCreate function and provides a
