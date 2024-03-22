@@ -15,12 +15,12 @@ import 'package:logbook/views/screens/tags.dart';
 const appName = "Logbook";
 
 void main() async {
-  await init();
+  final database = await init();
 
-  runApp(const MyApp());
+  runApp(MyApp(database: database));
 }
 
-Future<void> init() async {
+Future<Database> init() async {
   // Avoid errors caused by flutter upgrade.
   // Importing 'package:flutter/widgets.dart' is required.
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,10 +42,15 @@ Future<void> init() async {
     // path to perform database upgrades and downgrades.
     version: 1,
   );
+
+  return database;
+  // await getTags(database);
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.database});
+
+  final Database database;
 
   // This widget is the root of your application.
   @override
@@ -56,15 +61,16 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: appName),
+      home: MyHomePage(title: appName, database: database),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.database});
 
   final String title;
+  final Database database;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -129,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
           : (currentScreen == Screen.tagHistories
               ? const TagHistories()
               : (currentScreen == Screen.tags
-                  ? const Tags()
+                  ? Tags(database: widget.database)
                   : Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

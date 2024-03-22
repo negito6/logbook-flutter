@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class Tags extends StatelessWidget {
-  const Tags({super.key});
+  const Tags({super.key, required this.database});
+
+  final Database database;
 
   @override
   Widget build(BuildContext context) {

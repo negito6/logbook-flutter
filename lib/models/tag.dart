@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 enum Category {
   check("Check", 1),
   food("Food", 2),
@@ -28,7 +30,7 @@ class Tag {
   }
 }
 
-Future<List<Tag>> getTags(database) async {
+Future<List<Tag>> getTags(Future<Database> database) async {
   // Get a reference to the database.
   final db = await database;
 
