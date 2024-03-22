@@ -1,5 +1,9 @@
 enum Category {
-  food("Food", 1),
+  check("Check", 1),
+  food("Food", 2),
+  wash("Wash", 3),
+  clean("Clean", 4),
+  act("Act", 5),
   ;
 
   const Category(this.label, this.value);
