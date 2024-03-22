@@ -7,10 +7,9 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'package:logbook/models/tag.dart';
-
+import 'package:logbook/models/history.dart';
 
 void main() async {
-
   // Avoid errors caused by flutter upgrade.
   // Importing 'package:flutter/widgets.dart' is required.
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +23,8 @@ void main() async {
     onCreate: (db, version) {
       // Run the CREATE TABLE statement on the database.
       return db.execute(
-        Tag.createTagTableStatement(),
+        [Tag.createTagTableStatement(), History.createTagTableStatement()]
+            .join(";"),
       );
     },
     // Set the version. This executes the onCreate function and provides a
