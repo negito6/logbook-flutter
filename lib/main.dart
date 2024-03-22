@@ -83,13 +83,25 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       drawer: Drawer(
         child: ListView(
-          children: const [
-            DrawerHeader(
+          children: [
+            const DrawerHeader(
               child: Text("Menu"),
             ),
-            ListTile(title: Text("Daily histories")),
-            ListTile(title: Text("Tag histories")),
-            ListTile(title: Text("Tags")),
+            ListTile(
+                title: const Text("Daily histories"),
+                onTap: () {
+                  _incrementCounter();
+                }),
+            ListTile(
+                title: const Text("Tag histories"),
+                onTap: () {
+                  _incrementCounter();
+                }),
+            ListTile(
+                title: const Text("Tags"),
+                onTap: () {
+                  _incrementCounter();
+                }),
           ],
         ),
       ),
