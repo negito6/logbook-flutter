@@ -8,6 +8,9 @@ import 'package:sqflite/sqflite.dart';
 
 import 'package:logbook/models/tag.dart';
 import 'package:logbook/models/history.dart';
+import 'package:logbook/views/screens/daily_histories.dart';
+import 'package:logbook/views/screens/tag_histories.dart';
+import 'package:logbook/views/screens/tags.dart';
 
 const appName = "Logbook";
 
@@ -67,13 +70,27 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+enum Screen {
+  dailyHistories,
+  tagHistories,
+  tags,
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  Screen currentScreen = Screen.dailyHistories;
 
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
+  }
+
+  void switchScreen(BuildContext context, Screen screen) {
+    setState(() {
+      currentScreen = screen;
+    });
+    Navigator.pop(context);
   }
 
   @override
@@ -92,35 +109,41 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
                 title: const Text("Daily histories"),
                 onTap: () {
-                  _incrementCounter();
+                  switchScreen(context, Screen.dailyHistories);
                 }),
             ListTile(
                 title: const Text("Tag histories"),
                 onTap: () {
-                  _incrementCounter();
+                  switchScreen(context, Screen.tagHistories);
                 }),
             ListTile(
                 title: const Text("Tags"),
                 onTap: () {
-                  _incrementCounter();
+                  switchScreen(context, Screen.tags);
                 }),
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
+      body: currentScreen == Screen.dailyHistories
+          ? const DailyHistories()
+          : (currentScreen == Screen.tagHistories
+              ? const TagHistories()
+              : (currentScreen == Screen.tags
+                  ? const Tags()
+                  : Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const Text(
+                            'You have pushed the button this many times:',
+                          ),
+                          Text(
+                            '$_counter',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                        ],
+                      ),
+                    ))),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
