@@ -1,5 +1,4 @@
 enum Screen {
-  dailyHistories("Daily Histories"),
   tagHistories("Tag Histories"),
   tags("Tags"),
   ;

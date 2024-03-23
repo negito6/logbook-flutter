@@ -8,7 +8,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:logbook/models/enum/screen.dart';
 import 'package:logbook/models/tag.dart';
 import 'package:logbook/models/history.dart';
-import 'package:logbook/views/screens/daily_histories.dart';
 import 'package:logbook/views/screens/tag_histories.dart';
 import 'package:logbook/views/screens/tags.dart';
 
@@ -75,7 +74,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  Screen currentScreen = Screen.dailyHistories;
+  Screen currentScreen = Screen.tags;
   List<Tag> tags = [];
   List<History> histories = [];
   var now = DateTime.now();
@@ -99,12 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
             tags = result;
           });
         });
-      case Screen.dailyHistories:
-        getTags(widget.database).then((result) {
-          setState(() {
-            tags = result;
-          });
-        });
         getHistories(widget.database).then((result) {
           setState(() {
             histories = result;
@@ -116,35 +109,10 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.pop(context);
   }
 
-  Widget drawer(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        children: [
-          const DrawerHeader(
-            child: Text("Menu"),
-          ),
-          ListTile(
-              title: Text(Screen.dailyHistories.label),
-              onTap: () {
-                switchScreen(context, Screen.dailyHistories);
-              }),
-          ListTile(
-              title: Text(Screen.tags.label),
-              onTap: () {
-                switchScreen(context, Screen.tags);
-              }),
-        ],
-      ),
-    );
-  }
-
   Widget body(BuildContext context) {
     switch (currentScreen) {
       case Screen.tags:
         return Tags(
-            database: widget.database, tags: tags, histories: histories);
-      case Screen.dailyHistories:
-        return DailyHistories(
             database: widget.database, tags: tags, histories: histories);
       case Screen.tagHistories:
         return TagHistories(database: widget.database);
@@ -173,7 +141,6 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      drawer: drawer(context),
       body: body(context),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
