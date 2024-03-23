@@ -19,6 +19,12 @@ class History {
     this.deletedTimestamp,
   });
 
+  String doneOn() {
+    return DateTime.fromMillisecondsSinceEpoch(doneTimestamp * 1000)
+        .toString()
+        .substring(0, 10);
+  }
+
   String doneAt() {
     return DateTime.fromMillisecondsSinceEpoch(doneTimestamp * 1000).toString();
   }

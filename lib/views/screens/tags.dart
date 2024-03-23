@@ -57,7 +57,7 @@ class Tags extends StatelessWidget {
             ),
             TableCell(
               child:
-                  Text(tagHistories.isEmpty ? "" : tagHistories.first.doneAt()),
+                  Text(tagHistories.isEmpty ? "" : tagHistories.first.doneOn()),
             ),
             TableCell(
               child: tagHistories.isEmpty
