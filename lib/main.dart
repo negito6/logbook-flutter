@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 // sqlite
 import 'dart:async';
-import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
