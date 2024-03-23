@@ -38,6 +38,9 @@ class TagsState extends State<Tags> {
         datetime = picked;
       });
     }
+    setState(() {
+      tags = [];
+    });
   }
 
   @override
@@ -141,20 +144,20 @@ class TagsState extends State<Tags> {
       }
     }
 
-    return tags.isEmpty
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-                ElevatedButton(
-                    onPressed: () async {
-                      onPressedRaisedButton();
-                    },
-                    child: Text(dateStr(datetime))),
-                Table(
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          ElevatedButton(
+              onPressed: () async {
+                onPressedRaisedButton();
+              },
+              child: Text(dateStr(datetime))),
+          tags.isEmpty
+              ? Table(
                   border: TableBorder.all(),
                   children: rows,
                 )
-              ])
-        : TagHistories(database: widget.database, tag: tags.first);
+              : TagHistories(database: widget.database, tag: tags.first)
+        ]);
   }
 }
