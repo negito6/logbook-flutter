@@ -133,7 +133,13 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 switchScreen(context, Screen.tags);
               }),
-          ...Category.values
+          ...[
+            Category.check,
+            Category.food,
+            Category.wash,
+            Category.clean,
+            Category.act
+          ]
               .map((category) => ListTile(
                   title: Text(category.label),
                   onTap: () {
