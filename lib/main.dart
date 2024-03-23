@@ -93,6 +93,32 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.pop(context);
   }
 
+  Widget body(BuildContext context) {
+    switch (currentScreen) {
+      case Screen.tags:
+        return Tags(database: widget.database);
+      case Screen.dailyHistories:
+        return DailyHistories(database: widget.database);
+      case Screen.tagHistories:
+        return TagHistories(database: widget.database);
+      default:
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'You have pushed the button this many times:',
+              ),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ],
+          ),
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,26 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: currentScreen == Screen.dailyHistories
-          ? const DailyHistories()
-          : (currentScreen == Screen.tagHistories
-              ? const TagHistories()
-              : (currentScreen == Screen.tags
-                  ? Tags(database: widget.database)
-                  : Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            'You have pushed the button this many times:',
-                          ),
-                          Text(
-                            '$_counter',
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                        ],
-                      ),
-                    ))),
+      body: body(context),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',

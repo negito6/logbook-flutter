@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DailyHistories extends StatelessWidget {
-  const DailyHistories({super.key});
+  const DailyHistories({super.key, required this.database});
+
+  final Database database;
 
   @override
   Widget build(BuildContext context) {
