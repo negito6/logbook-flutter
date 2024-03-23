@@ -31,12 +31,10 @@ Future<Database> init() async {
     // constructed for each platform.
     join(await getDatabasesPath(), 'logbook_database.db'),
 
-    onCreate: (db, version) {
+    onCreate: (db, version) async {
       // Run the CREATE TABLE statement on the database.
-      return db.execute(
-        [Tag.createTagTableStatement(), History.createTagTableStatement()]
-            .join(";"),
-      );
+      await db.execute(Tag.createTagTableStatement());
+      await db.execute(History.createTagTableStatement());
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
