@@ -2,17 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:logbook/models/tag.dart';
 import 'package:logbook/models/history.dart';
+import 'package:logbook/views/formats/datetime.dart';
 
-class Tags extends StatelessWidget {
+class Tags extends StatefulWidget {
   const Tags(
       {super.key,
       required this.database,
-      required this.histories,
+      required this.datetime,
       required this.tags});
 
   final Database database;
-  final List<History> histories;
   final List<Tag> tags;
+  final DateTime datetime;
+
+  @override
+  State<Tags> createState() => TagsState();
+}
+
+class TagsState extends State<Tags> {
+  DateTime datetime = DateTime.now();
+  List<History> histories = [];
+
+  void onPressedRaisedButton() async {
+    final DateTime? picked = await showDatePicker(
+        locale: const Locale("ja"),
+        context: context,
+        initialDate: datetime,
+        firstDate: DateTime(2020),
+        lastDate: DateTime.now().add(const Duration(days: 1)));
+
+    if (picked != null) {
+      setState(() {
+        datetime = picked;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    datetime = widget.datetime;
+    reload();
+  }
+
+  void reload() async {
+    getHistories(widget.database).then((result) {
+      setState(() {
+        histories = result;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +86,14 @@ class Tags extends StatelessWidget {
         ],
       ));
 
-      final tagCategory = tags.where((tag) => tag.category == category.value);
+      final tagCategory =
+          widget.tags.where((tag) => tag.category == category.value);
       for (var tag in tagCategory) {
-        final tagHistories = histories.where(
-            (history) => history.tagId == tag.id && history.notDeleted());
+        final tagHistories = histories.where((history) =>
+            history.tagId == tag.id &&
+            history.notDeleted());
+        final tagHistoriesOnDate = tagHistories.where((history) =>
+             history.doneOn() == dateStr(datetime));
         rows.add(TableRow(
           children: <Widget>[
             TableCell(
@@ -60,26 +104,27 @@ class Tags extends StatelessWidget {
                   Text(tagHistories.isEmpty ? "" : tagHistories.first.doneOn()),
             ),
             TableCell(
-              child: tagHistories.isEmpty
+              child: tagHistoriesOnDate.isEmpty
                   ? ElevatedButton(
                       onPressed: () async {
-                        await database.insert(
+                        await widget.database.insert(
                           'histories',
                           {
                             'tagId': tag.id,
                             'description': "",
                             'value': 0,
-                            'doneTimestamp': currentTimestamp(),
+                            'doneTimestamp': timestamp(datetime),
                             'createdTimestamp': currentTimestamp(),
                           },
                           conflictAlgorithm: ConflictAlgorithm.replace,
                         );
+                        reload();
                       },
                       child: const Text('Done'),
                     )
                   : ElevatedButton(
                       onPressed: () async {
-                        await database.update(
+                        await widget.database.update(
                           'histories',
                           {
                             'deletedTimestamp': currentTimestamp(),
@@ -90,6 +135,7 @@ class Tags extends StatelessWidget {
                           whereArgs: [tag.id],
                           conflictAlgorithm: ConflictAlgorithm.replace,
                         );
+                        reload();
                       },
                       child: const Text('Delete'),
                     ),
@@ -99,9 +145,18 @@ class Tags extends StatelessWidget {
       }
     }
 
-    return Table(
-      border: TableBorder.all(),
-      children: rows,
-    );
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          ElevatedButton(
+              onPressed: () async {
+                onPressedRaisedButton();
+              },
+              child: Text(dateStr(datetime))),
+          Table(
+            border: TableBorder.all(),
+            children: rows,
+          )
+        ]);
   }
 }

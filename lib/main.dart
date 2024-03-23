@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 // sqlite
 import 'dart:async';
@@ -54,6 +55,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en', 'US'),
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -78,7 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Screen currentScreen = Screen.tags;
   Category currentCategory = Category.undefined;
   List<Tag> tags = [];
-  List<History> histories = [];
   var now = DateTime.now();
   int tagId = 0;
 
@@ -105,11 +113,6 @@ class _MyHomePageState extends State<MyHomePage> {
         getTags(widget.database).then((result) {
           setState(() {
             tags = result;
-          });
-        });
-        getHistories(widget.database).then((result) {
-          setState(() {
-            histories = result;
           });
         });
       default:
@@ -145,8 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget body(BuildContext context) {
     switch (currentScreen) {
       case Screen.tags:
-        return Tags(
-            database: widget.database, tags: tags, histories: histories);
+        return Tags(database: widget.database, datetime: now, tags: tags);
       case Screen.categoryTags:
         return CategoryTags(
             database: widget.database, category: currentCategory, tags: tags);
