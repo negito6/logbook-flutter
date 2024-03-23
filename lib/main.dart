@@ -130,17 +130,17 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 switchScreen(context, Screen.tags);
               }),
-          ...Category.values.map((category) =>
-          ListTile(
-              title: Text(category.label),
-              onTap: () {
-                switchCategoryScreen(context, category);
-              })).toList(),
+          ...Category.values
+              .map((category) => ListTile(
+                  title: Text(category.label),
+                  onTap: () {
+                    switchCategoryScreen(context, category);
+                  }))
+              .toList(),
         ],
       ),
     );
   }
-
 
   Widget body(BuildContext context) {
     switch (currentScreen) {
