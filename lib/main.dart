@@ -93,6 +93,33 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.pop(context);
   }
 
+  Widget drawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          const DrawerHeader(
+            child: Text("Menu"),
+          ),
+          ListTile(
+              title: Text(Screen.dailyHistories.label),
+              onTap: () {
+                switchScreen(context, Screen.dailyHistories);
+              }),
+          ListTile(
+              title: Text(Screen.tagHistories.label),
+              onTap: () {
+                switchScreen(context, Screen.tagHistories);
+              }),
+          ListTile(
+              title: Text(Screen.tags.label),
+              onTap: () {
+                switchScreen(context, Screen.tags);
+              }),
+        ],
+      ),
+    );
+  }
+
   Widget body(BuildContext context) {
     switch (currentScreen) {
       case Screen.tags:
@@ -126,30 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            const DrawerHeader(
-              child: Text("Menu"),
-            ),
-            ListTile(
-                title: Text(Screen.dailyHistories.label),
-                onTap: () {
-                  switchScreen(context, Screen.dailyHistories);
-                }),
-            ListTile(
-                title: Text(Screen.tagHistories.label),
-                onTap: () {
-                  switchScreen(context, Screen.tagHistories);
-                }),
-            ListTile(
-                title: Text(Screen.tags.label),
-                onTap: () {
-                  switchScreen(context, Screen.tags);
-                }),
-          ],
-        ),
-      ),
+      drawer: drawer(context),
       body: body(context),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
