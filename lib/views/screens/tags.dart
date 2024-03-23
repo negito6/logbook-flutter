@@ -25,6 +25,9 @@ class Tags extends StatelessWidget {
           TableCell(
             child: Text("Date"),
           ),
+          TableCell(
+            child: Text("Today"),
+          ),
         ],
       )
     ];
@@ -33,6 +36,9 @@ class Tags extends StatelessWidget {
         children: <Widget>[
           TableCell(
             child: Text(category.label),
+          ),
+          const TableCell(
+            child: Text("----"),
           ),
           const TableCell(
             child: Text("----"),
@@ -53,6 +59,9 @@ class Tags extends StatelessWidget {
               child: Text(tagHistories.isEmpty
                   ? ""
                   : tagHistories.first.createdAt.toString()),
+            ),
+            const TableCell(
+              child: Text("----"),
             ),
           ],
         ));
