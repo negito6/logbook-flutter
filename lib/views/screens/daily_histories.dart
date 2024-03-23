@@ -16,6 +16,48 @@ class DailyHistories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var rows = <TableRow>[];
+    for (var tag in tags) {
+      final tagHistories = histories.where((value) => value.tagId == tag.id);
+
+      final cells = <TableCell>[
+        TableCell(
+          child: Text(tag.name),
+        ),
+        TableCell(
+          child: Text(tag.label()),
+        )
+      ];
+
+      if (tagHistories.isEmpty) {
+        rows.add(TableRow(
+          children: <Widget>[
+            ...cells,
+            const TableCell(
+              child: Text(""),
+            ),
+            const TableCell(
+              child: Text(""),
+            ),
+          ],
+        ));
+      } else {
+        for (var history in tagHistories) {
+          rows.add(TableRow(
+            children: <Widget>[
+              ...cells,
+              TableCell(
+                child: Text(history.description),
+              ),
+              TableCell(
+                child: Text(history.value.toString()),
+              ),
+            ],
+          ));
+        }
+      }
+    }
+
     return Table(
       border: TableBorder.all(),
       children: <TableRow>[
@@ -28,31 +70,14 @@ class DailyHistories extends StatelessWidget {
               child: Text("Category"),
             ),
             TableCell(
-              child: Text("Value"),
+              child: Text("Desc"),
             ),
             TableCell(
-              child: Text("Desc"),
+              child: Text("Value"),
             ),
           ],
         ),
-        ...tags
-            .map((tag) => TableRow(
-                  children: <Widget>[
-                    TableCell(
-                      child: Text(tag.name),
-                    ),
-                    TableCell(
-                      child: Text(tag.label()),
-                    ),
-                    TableCell(
-                      child: Text(tag.label()),
-                    ),
-                    TableCell(
-                      child: Text(tag.label()),
-                    ),
-                  ],
-                ))
-            .toList(),
+        ...rows,
       ],
     );
   }
