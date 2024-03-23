@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'package:logbook/models/enum/screen.dart';
 import 'package:logbook/models/tag.dart';
 import 'package:logbook/models/history.dart';
 import 'package:logbook/views/screens/daily_histories.dart';
@@ -75,12 +76,6 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-enum Screen {
-  dailyHistories,
-  tagHistories,
-  tags,
-}
-
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   Screen currentScreen = Screen.dailyHistories;
@@ -112,17 +107,17 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("Menu"),
             ),
             ListTile(
-                title: const Text("Daily histories"),
+                title: Text(Screen.dailyHistories.label),
                 onTap: () {
                   switchScreen(context, Screen.dailyHistories);
                 }),
             ListTile(
-                title: const Text("Tag histories"),
+                title: Text(Screen.tagHistories.label),
                 onTap: () {
                   switchScreen(context, Screen.tagHistories);
                 }),
             ListTile(
-                title: const Text("Tags"),
+                title: Text(Screen.tags.label),
                 onTap: () {
                   switchScreen(context, Screen.tags);
                 }),
