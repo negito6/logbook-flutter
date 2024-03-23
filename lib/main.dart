@@ -180,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       drawer: drawer(context),
-      body: body(context),
+      body: SingleChildScrollView(child: body(context)),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
