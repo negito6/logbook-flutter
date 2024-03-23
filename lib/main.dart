@@ -105,6 +105,23 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.pop(context);
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    loadTags();
+  }
+
+  void loadTags() async {
+    getTags(widget.database).then((result) {
+      final target = result;
+      target.sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
+      setState(() {
+        tags = target;
+      });
+    });
+  }
+
   void switchScreen(BuildContext context, Screen screen) {
     setState(() {
       currentScreen = screen;
@@ -112,11 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (currentScreen) {
       case Screen.tags:
-        getTags(widget.database).then((result) {
-          setState(() {
-            tags = result;
-          });
-        });
+        loadTags();
       default:
         return;
     }
