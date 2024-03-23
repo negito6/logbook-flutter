@@ -141,7 +141,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget body(BuildContext context) {
     switch (currentScreen) {
       case Screen.tags:
-        return Tags(database: widget.database, records: tags);
+        return Tags(
+            database: widget.database, tags: tags, histories: histories);
       case Screen.dailyHistories:
         return DailyHistories(
             database: widget.database, tags: tags, histories: histories);
