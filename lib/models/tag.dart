@@ -16,14 +16,16 @@ enum Category {
 }
 
 class Tag {
-  final int id;
+  final int? id;
   final String name;
   final int category;
+  DateTime? deletedAt;
 
-  const Tag({
-    required this.id,
+  Tag({
+    this.id,
     required this.name,
     required this.category,
+    this.deletedAt,
   });
 
   String label() {
@@ -34,7 +36,7 @@ class Tag {
   }
 
   static String createTagTableStatement() {
-    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER)';
+    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER, deletedAt DATETIME NULL)';
   }
 }
 

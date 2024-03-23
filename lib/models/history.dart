@@ -1,26 +1,26 @@
 import 'package:sqflite/sqflite.dart';
 
 class History {
-  final int id;
+  int? id;
   final int tagId;
   final String description;
   final int value;
   final DateTime doneAt;
   final DateTime createdAt;
-  final DateTime deletedAt;
+  DateTime? deletedAt;
 
-  const History({
-    required this.id,
+  History({
+    this.id,
     required this.tagId,
     required this.description,
     required this.value,
     required this.doneAt,
     required this.createdAt,
-    required this.deletedAt,
+    this.deletedAt,
   });
 
   static String createTagTableStatement() {
-    return 'CREATE TABLE histories(id INTEGER PRIMARY KEY, tagId INTEGER, description TEXT, value INTEGER, doneAt DATETIME, createdAt DATETIME, deletedAt DATETIME)';
+    return 'CREATE TABLE histories(id INTEGER PRIMARY KEY, tagId INTEGER, description TEXT, value INTEGER, doneAt DATETIME, createdAt DATETIME, deletedAt DATETIME NULL)';
   }
 }
 
