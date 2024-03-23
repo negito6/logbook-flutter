@@ -86,9 +86,9 @@ class TagsState extends State<Tags> {
         ],
       ));
 
-      final tagCategory =
+      final tagCategories =
           widget.tags.where((tag) => tag.category == category.value);
-      for (var tag in tagCategory) {
+      for (var tag in tagCategories) {
         final tagHistories = histories.where(
             (history) => history.tagId == tag.id && history.notDeleted());
         final tagHistoriesOnDate = tagHistories
