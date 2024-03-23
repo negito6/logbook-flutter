@@ -92,7 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
       switch (currentScreen) {
         case Screen.tags:
-          getTags(widget.database).then((result) { tags = result; });
+          getTags(widget.database).then((result) {
+            tags = result;
+          });
         default:
           return;
       }

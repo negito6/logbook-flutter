@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 enum Category {
+  undefined("Undefined", 0),
   check("Check", 1),
   food("Food", 2),
   wash("Wash", 3),
@@ -24,6 +25,13 @@ class Tag {
     required this.name,
     required this.category,
   });
+
+  String label() {
+    return Category.values.firstWhere((value) => value.value == category,
+        orElse: () {
+      return Category.undefined;
+    }).label;
+  }
 
   static String createTagTableStatement() {
     return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER)';

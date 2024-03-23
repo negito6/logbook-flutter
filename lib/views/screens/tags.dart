@@ -23,19 +23,18 @@ class Tags extends StatelessWidget {
             ),
           ],
         ),
-        TableRow(
-          children: <Widget>[
-            Container(
-              height: 64,
-              width: 128,
-              color: Colors.purple,
-            ),
-            Container(
-              height: 32,
-              color: Colors.yellow,
-            ),
-          ],
-        ),
+        ...records
+            .map((tag) => TableRow(
+                  children: <Widget>[
+                    TableCell(
+                      child: Text(tag.name),
+                    ),
+                    TableCell(
+                      child: Text(tag.label()),
+                    ),
+                  ],
+                ))
+            .toList(),
       ],
     );
   }
