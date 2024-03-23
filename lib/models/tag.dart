@@ -15,6 +15,16 @@ enum Category {
   final int value;
 }
 
+List<Category> availableCategories() {
+  return [
+    Category.check,
+    Category.food,
+    Category.wash,
+    Category.clean,
+    Category.act
+  ];
+}
+
 class Tag {
   final int? id;
   final String name;
