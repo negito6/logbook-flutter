@@ -44,7 +44,6 @@ Future<Database> init() async {
   );
 
   return database;
-  // await getTags(database);
 }
 
 class MyApp extends StatelessWidget {
@@ -79,6 +78,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   Screen currentScreen = Screen.dailyHistories;
+  List<Tag> tags = [];
 
   void _incrementCounter() {
     setState(() {
@@ -87,8 +87,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void switchScreen(BuildContext context, Screen screen) {
-    setState(() {
+    setState(() async {
       currentScreen = screen;
+
+      switch (currentScreen) {
+        case Screen.tags:
+          getTags(widget.database).then((result) { tags = result; });
+        default:
+          return;
+      }
     });
     Navigator.pop(context);
   }
@@ -123,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget body(BuildContext context) {
     switch (currentScreen) {
       case Screen.tags:
-        return Tags(database: widget.database);
+        return Tags(database: widget.database, records: tags);
       case Screen.dailyHistories:
         return DailyHistories(database: widget.database);
       case Screen.tagHistories:

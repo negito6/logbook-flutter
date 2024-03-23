@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:logbook/models/tag.dart';
 
 class Tags extends StatelessWidget {
-  const Tags({super.key, required this.database});
+  const Tags({super.key, required this.database, required this.records});
 
   final Database database;
+  final List<Tag> records;
 
   @override
   Widget build(BuildContext context) {

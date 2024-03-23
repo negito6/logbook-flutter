@@ -30,9 +30,8 @@ class Tag {
   }
 }
 
-Future<List<Tag>> getTags(Future<Database> database) async {
+Future<List<Tag>> getTags(Database db) async {
   // Get a reference to the database.
-  final db = await database;
 
   final List<Map<String, Object?>> tagMaps = await db.query('tags');
 
