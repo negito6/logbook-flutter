@@ -19,12 +19,14 @@ class Tag {
   final int? id;
   final String name;
   final int category;
+  DateTime? updatedAt;
   DateTime? deletedAt;
 
   Tag({
     this.id,
     required this.name,
     required this.category,
+    this.updatedAt,
     this.deletedAt,
   });
 
@@ -36,7 +38,7 @@ class Tag {
   }
 
   static String createTagTableStatement() {
-    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER, deletedAt DATETIME NULL)';
+    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER, updatedAt DATETIME, deletedAt DATETIME NULL)';
   }
 }
 
