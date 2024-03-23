@@ -19,16 +19,20 @@ class Tag {
   final int? id;
   final String name;
   final int category;
-  DateTime? updatedAt;
-  DateTime? deletedAt;
+  int? updatedTimestamp;
+  int? deletedTimestamp;
 
   Tag({
     this.id,
     required this.name,
     required this.category,
-    this.updatedAt,
-    this.deletedAt,
+    this.updatedTimestamp,
+    this.deletedTimestamp,
   });
+
+  bool isDeleted() {
+    return deletedTimestamp != null;
+  }
 
   String label() {
     return Category.values.firstWhere((value) => value.value == category,
@@ -38,7 +42,7 @@ class Tag {
   }
 
   static String createTagTableStatement() {
-    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER, updatedAt DATETIME, deletedAt DATETIME NULL)';
+    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER, updatedTimestamp INTEGER, deletedTimestamp INTEGER NULL)';
   }
 }
 

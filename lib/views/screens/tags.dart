@@ -48,17 +48,16 @@ class Tags extends StatelessWidget {
 
       final tagCategory = tags.where((tag) => tag.category == category.value);
       for (var tag in tagCategory) {
-        final tagHistories =
-            histories.where((history) => history.tagId == tag.id);
+        final tagHistories = histories.where(
+            (history) => history.tagId == tag.id && history.notDeleted());
         rows.add(TableRow(
           children: <Widget>[
             TableCell(
               child: Text(tag.name),
             ),
             TableCell(
-              child: Text(tagHistories.isEmpty
-                  ? ""
-                  : tagHistories.first.createdAt.toString()),
+              child:
+                  Text(tagHistories.isEmpty ? "" : tagHistories.first.doneAt()),
             ),
             const TableCell(
               child: Text("----"),

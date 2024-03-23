@@ -5,22 +5,30 @@ class History {
   final int tagId;
   final String description;
   final int value;
-  final DateTime doneAt;
-  final DateTime createdAt;
-  DateTime? deletedAt;
+  final int doneTimestamp;
+  final int createdTimestamp;
+  int? deletedTimestamp;
 
   History({
     this.id,
     required this.tagId,
     required this.description,
     required this.value,
-    required this.doneAt,
-    required this.createdAt,
-    this.deletedAt,
+    required this.doneTimestamp,
+    required this.createdTimestamp,
+    this.deletedTimestamp,
   });
 
+  String doneAt() {
+    return DateTime.fromMillisecondsSinceEpoch(doneTimestamp * 1000).toString();
+  }
+
+  bool notDeleted() {
+    return deletedTimestamp == null;
+  }
+
   static String createTagTableStatement() {
-    return 'CREATE TABLE histories(id INTEGER PRIMARY KEY, tagId INTEGER, description TEXT, value INTEGER, doneAt DATETIME, createdAt DATETIME, deletedAt DATETIME NULL)';
+    return 'CREATE TABLE histories(id INTEGER PRIMARY KEY, tagId INTEGER, description TEXT, value INTEGER, doneTimestamp INTEGER, createdTimestamp INTEGER, deletedTimestamp INTEGER NULL)';
   }
 }
 
@@ -35,18 +43,18 @@ Future<List<History>> getHistories(Database db) async {
           'tagId': tagId as int,
           'description': description as String,
           'value': value as int,
-          'doneAt': doneAt as DateTime,
-          'createdAt': createdAt as DateTime,
-          'deletedAt': deletedAt as DateTime,
+          'doneTimestamp': doneTimestamp as int,
+          'createdTimestamp': createdTimestamp as int,
+          // 'deletedTimestamp': deletedTimestamp as int,
         } in tagMaps)
       History(
         id: id,
         tagId: tagId,
         description: description,
         value: value,
-        doneAt: doneAt,
-        createdAt: createdAt,
-        deletedAt: deletedAt,
+        doneTimestamp: doneTimestamp,
+        createdTimestamp: createdTimestamp,
+        // deletedTimestamp: deletedTimestamp,
       ),
   ];
 }
