@@ -100,6 +100,9 @@ class _MyHomePageState extends State<MyHomePage> {
           getTags(widget.database).then((result) {
             tags = result;
           });
+          getHistories(widget.database).then((result) {
+            histories = result;
+          });
         default:
           return;
       }
