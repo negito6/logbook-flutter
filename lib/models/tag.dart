@@ -19,14 +19,16 @@ class Tag {
   final int? id;
   final String name;
   final int category;
-  int? updatedTimestamp;
+  final int createdTimestamp;
+  final int updatedTimestamp;
   int? deletedTimestamp;
 
   Tag({
     this.id,
     required this.name,
     required this.category,
-    this.updatedTimestamp,
+    required this.createdTimestamp,
+    required this.updatedTimestamp,
     this.deletedTimestamp,
   });
 
@@ -42,7 +44,7 @@ class Tag {
   }
 
   static String createTagTableStatement() {
-    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER, updatedTimestamp INTEGER, deletedTimestamp INTEGER NULL)';
+    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER, createdTimestamp INTEGER, updatedTimestamp INTEGER, deletedTimestamp INTEGER NULL)';
   }
 }
 
@@ -56,7 +58,15 @@ Future<List<Tag>> getTags(Database db) async {
           'id': id as int,
           'name': name as String,
           'category': category as int,
+          'createdTimestamp': createdTimestamp as int,
+          'updatedTimestamp': updatedTimestamp as int,
         } in tagMaps)
-      Tag(id: id, name: name, category: category),
+      Tag(
+        id: id,
+        name: name,
+        category: category,
+        createdTimestamp: createdTimestamp,
+        updatedTimestamp: updatedTimestamp,
+      ),
   ];
 }

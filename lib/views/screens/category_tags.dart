@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:logbook/models/tag.dart';
+import 'package:logbook/models/history.dart';
+import 'package:logbook/views/formats/datetime.dart';
 
 class MyCustomForm extends StatefulWidget {
   const MyCustomForm(
@@ -60,6 +62,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                     {
                       'name': myController.text,
                       'category': widget.category.value,
+                      'createdTimestamp': currentTimestamp(),
+                      'updatedTimestamp': currentTimestamp(),
                     },
                     conflictAlgorithm: ConflictAlgorithm.replace,
                   );
@@ -78,7 +82,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 }
 
-class CategoryTags extends StatelessWidget {
+class CategoryTags extends StatefulWidget {
   const CategoryTags(
       {super.key,
       required this.database,
@@ -90,24 +94,70 @@ class CategoryTags extends StatelessWidget {
   final List<Tag> tags;
 
   @override
+  State<CategoryTags> createState() => CategoryTagsState();
+}
+
+class CategoryTagsState extends State<CategoryTags> {
+  List<History> histories = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    reload();
+  }
+
+  void reload() async {
+    getHistories(widget.database).then((result) {
+      setState(() {
+        histories = result;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final tags = widget.tags
+        .where((tag) => tag.category == widget.category.value)
+        .toList();
+    tags.sort((a, b) => a.updatedTimestamp.compareTo(b.updatedTimestamp));
     var rows = <TableRow>[
       TableRow(
         children: <Widget>[
           TableCell(
-            child: Text(category.label),
+            child: Text(widget.category.label),
+          ),
+          const TableCell(
+            child: Text(""),
           ),
         ],
       ),
-      ...tags
-          .where((tag) => tag.category == category.value)
-          .map((tag) => TableRow(
-                children: <Widget>[
-                  TableCell(
-                    child: Text(tag.name),
-                  ),
-                ],
-              )),
+      ...tags.map((tag) => TableRow(
+            children: <Widget>[
+              TableCell(
+                child: Text(tag.name),
+              ),
+              TableCell(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await widget.database.update(
+                      'tags',
+                      {
+                        'updatedTimestamp': currentTimestamp(),
+                      },
+                      // Ensure that the Dog has a matching id.
+                      where: 'id = ?',
+                      // Pass the Dog's id as a whereArg to prevent SQL injection.
+                      whereArgs: [tag.id],
+                      conflictAlgorithm: ConflictAlgorithm.replace,
+                    );
+                    reload();
+                  },
+                  child: const Text('Delete'),
+                ),
+              ),
+            ],
+          )),
     ];
 
     return Column(children: [
@@ -115,7 +165,7 @@ class CategoryTags extends StatelessWidget {
         border: TableBorder.all(),
         children: rows,
       ),
-      MyCustomForm(database: database, category: category),
+      MyCustomForm(database: widget.database, category: widget.category),
     ]);
   }
 }
