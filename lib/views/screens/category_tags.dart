@@ -120,7 +120,7 @@ class CategoryTagsState extends State<CategoryTags> {
     final tags = widget.tags
         .where((tag) => tag.category == widget.category.value)
         .toList();
-    tags.sort((a, b) => a.updatedTimestamp.compareTo(b.updatedTimestamp));
+    tags.sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
     var rows = <TableRow>[
       TableRow(
         children: <Widget>[
@@ -153,7 +153,7 @@ class CategoryTagsState extends State<CategoryTags> {
                     );
                     reload();
                   },
-                  child: const Text('Delete'),
+                  child: const Text('Update'),
                 ),
               ),
             ],
