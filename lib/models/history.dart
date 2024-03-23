@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:logbook/views/formats/datetime.dart';
 
 class History {
   int? id;
@@ -20,13 +21,11 @@ class History {
   });
 
   String doneOn() {
-    return DateTime.fromMillisecondsSinceEpoch(doneTimestamp * 1000)
-        .toString()
-        .substring(0, 10);
+    return dateStr(datetimeFromTimestamp(doneTimestamp));
   }
 
   String doneAt() {
-    return DateTime.fromMillisecondsSinceEpoch(doneTimestamp * 1000).toString();
+    return datetimeStr(doneTimestamp);
   }
 
   bool notDeleted() {

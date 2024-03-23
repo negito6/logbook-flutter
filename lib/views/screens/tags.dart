@@ -69,10 +69,8 @@ class Tags extends StatelessWidget {
                             'tagId': tag.id,
                             'description': "",
                             'value': 0,
-                            'doneTimestamp':
-                                (DateTime.now().millisecondsSinceEpoch ~/ 1000),
-                            'createdTimestamp':
-                                (DateTime.now().millisecondsSinceEpoch ~/ 1000),
+                            'doneTimestamp': currentTimestamp(),
+                            'createdTimestamp': currentTimestamp(),
                           },
                           conflictAlgorithm: ConflictAlgorithm.replace,
                         );
@@ -84,8 +82,7 @@ class Tags extends StatelessWidget {
                         await database.update(
                           'histories',
                           {
-                            'deletedTimestamp':
-                                DateTime.now().millisecondsSinceEpoch / 1000,
+                            'deletedTimestamp': currentTimestamp(),
                           },
                           // Ensure that the Dog has a matching id.
                           where: 'id = ?',
