@@ -88,6 +88,13 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void switchCategoryScreen(BuildContext context, Category category) {
+    setState(() {
+      currentCategory = category;
+    });
+    switchScreen(context, Screen.categoryTags);
+  }
+
   void switchScreen(BuildContext context, Screen screen) {
     setState(() {
       currentScreen = screen;
@@ -110,6 +117,30 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     Navigator.pop(context);
   }
+
+  Widget drawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          const DrawerHeader(
+            child: Text("Menu"),
+          ),
+          ListTile(
+              title: Text(Screen.tags.label),
+              onTap: () {
+                switchScreen(context, Screen.tags);
+              }),
+          ...Category.values.map((category) =>
+          ListTile(
+              title: Text(category.label),
+              onTap: () {
+                switchCategoryScreen(context, category);
+              })).toList(),
+        ],
+      ),
+    );
+  }
+
 
   Widget body(BuildContext context) {
     switch (currentScreen) {
@@ -145,6 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
+      drawer: drawer(context),
       body: body(context),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
