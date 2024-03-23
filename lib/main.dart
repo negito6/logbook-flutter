@@ -10,6 +10,7 @@ import 'package:logbook/models/tag.dart';
 import 'package:logbook/models/history.dart';
 import 'package:logbook/views/screens/tag_histories.dart';
 import 'package:logbook/views/screens/tags.dart';
+import 'package:logbook/views/screens/category_tags.dart';
 
 const appName = "Logbook";
 
@@ -75,6 +76,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   Screen currentScreen = Screen.tags;
+  Category currentCategory = Category.undefined;
   List<Tag> tags = [];
   List<History> histories = [];
   var now = DateTime.now();
@@ -114,6 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
       case Screen.tags:
         return Tags(
             database: widget.database, tags: tags, histories: histories);
+      case Screen.categoryTags:
+        return CategoryTags(category: currentCategory, tags: tags);
       case Screen.tagHistories:
         return TagHistories(database: widget.database);
       default:
