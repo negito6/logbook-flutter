@@ -79,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   Screen currentScreen = Screen.dailyHistories;
   List<Tag> tags = [];
+  List<History> histories = [];
 
   void _incrementCounter() {
     setState(() {
@@ -92,6 +93,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
       switch (currentScreen) {
         case Screen.tags:
+          getTags(widget.database).then((result) {
+            tags = result;
+          });
+        case Screen.dailyHistories:
           getTags(widget.database).then((result) {
             tags = result;
           });
@@ -129,7 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
       case Screen.tags:
         return Tags(database: widget.database, records: tags);
       case Screen.dailyHistories:
-        return DailyHistories(database: widget.database);
+        return DailyHistories(
+            database: widget.database, tags: tags, histories: histories);
       case Screen.tagHistories:
         return TagHistories(database: widget.database);
       default:
