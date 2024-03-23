@@ -119,7 +119,7 @@ class TagsState extends State<Tags> {
                           // Ensure that the Dog has a matching id.
                           where: 'id = ?',
                           // Pass the Dog's id as a whereArg to prevent SQL injection.
-                          whereArgs: [tag.id],
+                          whereArgs: [tagHistoriesOnDate.first.id],
                           conflictAlgorithm: ConflictAlgorithm.replace,
                         );
                         reload();

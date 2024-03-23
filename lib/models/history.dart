@@ -50,7 +50,7 @@ Future<List<History>> getHistories(Database db) async {
           'value': value as int,
           'doneTimestamp': doneTimestamp as int,
           'createdTimestamp': createdTimestamp as int,
-          // 'deletedTimestamp': deletedTimestamp as int,
+          'deletedTimestamp': deletedTimestamp as int?,
         } in tagMaps)
       History(
         id: id,
@@ -59,7 +59,7 @@ Future<List<History>> getHistories(Database db) async {
         value: value,
         doneTimestamp: doneTimestamp,
         createdTimestamp: createdTimestamp,
-        // deletedTimestamp: deletedTimestamp,
+        deletedTimestamp: deletedTimestamp,
       ),
   ];
 }
