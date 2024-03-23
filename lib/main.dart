@@ -9,7 +9,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:logbook/models/enum/screen.dart';
 import 'package:logbook/models/tag.dart';
 import 'package:logbook/models/history.dart';
-import 'package:logbook/views/screens/tag_histories.dart';
 import 'package:logbook/views/screens/tags.dart';
 import 'package:logbook/views/screens/category_tags.dart';
 
@@ -167,8 +166,6 @@ class _MyHomePageState extends State<MyHomePage> {
       case Screen.categoryTags:
         return CategoryTags(
             database: widget.database, category: currentCategory);
-      case Screen.tagHistories:
-        return TagHistories(database: widget.database);
       default:
         return Center(
           child: Column(

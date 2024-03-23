@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:logbook/models/tag.dart';
 import 'package:logbook/models/history.dart';
 import 'package:logbook/views/formats/datetime.dart';
+import 'package:logbook/views/screens/tag_histories.dart';
 
 class Tags extends StatefulWidget {
   const Tags(
@@ -22,6 +23,7 @@ class Tags extends StatefulWidget {
 class TagsState extends State<Tags> {
   DateTime datetime = DateTime.now();
   List<History> histories = [];
+  List<Tag> tags = [];
 
   void onPressedRaisedButton() async {
     final DateTime? picked = await showDatePicker(
@@ -84,7 +86,14 @@ class TagsState extends State<Tags> {
         rows.add(TableRow(
           children: <Widget>[
             TableCell(
-              child: Text(tag.name),
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    tags = [tag];
+                  });
+                },
+                child: Text(tag.name),
+              ),
             ),
             TableCell(
               child:
@@ -132,18 +141,20 @@ class TagsState extends State<Tags> {
       }
     }
 
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          ElevatedButton(
-              onPressed: () async {
-                onPressedRaisedButton();
-              },
-              child: Text(dateStr(datetime))),
-          Table(
-            border: TableBorder.all(),
-            children: rows,
-          )
-        ]);
+    return tags.isEmpty
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+                ElevatedButton(
+                    onPressed: () async {
+                      onPressedRaisedButton();
+                    },
+                    child: Text(dateStr(datetime))),
+                Table(
+                  border: TableBorder.all(),
+                  children: rows,
+                )
+              ])
+        : TagHistories(database: widget.database, tag: tags.first);
   }
 }
