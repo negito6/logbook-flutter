@@ -80,6 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Screen currentScreen = Screen.dailyHistories;
   List<Tag> tags = [];
   List<History> histories = [];
+  var now = DateTime.now();
+  int tagId = 0;
 
   void _incrementCounter() {
     setState(() {
@@ -88,25 +90,31 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void switchScreen(BuildContext context, Screen screen) {
-    setState(() async {
+    setState(() {
       currentScreen = screen;
+    });
 
-      switch (currentScreen) {
-        case Screen.tags:
-          getTags(widget.database).then((result) {
+    switch (currentScreen) {
+      case Screen.tags:
+        getTags(widget.database).then((result) {
+          setState(() {
             tags = result;
           });
-        case Screen.dailyHistories:
-          getTags(widget.database).then((result) {
+        });
+      case Screen.dailyHistories:
+        getTags(widget.database).then((result) {
+          setState(() {
             tags = result;
           });
-          getHistories(widget.database).then((result) {
+        });
+        getHistories(widget.database).then((result) {
+          setState(() {
             histories = result;
           });
-        default:
-          return;
-      }
-    });
+        });
+      default:
+        return;
+    }
     Navigator.pop(context);
   }
 
