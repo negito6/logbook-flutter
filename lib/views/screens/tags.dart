@@ -87,7 +87,9 @@ class TagsState extends State<Tags> {
       ));
 
       final tagCategories =
-          widget.tags.where((tag) => tag.category == category.value);
+          widget.tags.where((tag) => tag.category == category.value).toList();
+      tagCategories
+          .sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
       for (var tag in tagCategories) {
         final tagHistories = histories.where(
             (history) => history.tagId == tag.id && history.notDeleted());
