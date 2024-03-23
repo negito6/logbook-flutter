@@ -161,11 +161,11 @@ class CategoryTagsState extends State<CategoryTags> {
     ];
 
     return Column(children: [
+      MyCustomForm(database: widget.database, category: widget.category),
       Table(
         border: TableBorder.all(),
         children: rows,
       ),
-      MyCustomForm(database: widget.database, category: widget.category),
     ]);
   }
 }
