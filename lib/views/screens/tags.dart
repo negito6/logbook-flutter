@@ -56,22 +56,8 @@ class TagsState extends State<Tags> {
 
   @override
   Widget build(BuildContext context) {
-    var rows = <TableRow>[
-      const TableRow(
-        children: <Widget>[
-          TableCell(
-            child: Text("Tag"),
-          ),
-          TableCell(
-            child: Text("Date"),
-          ),
-          TableCell(
-            child: Text("Today"),
-          ),
-        ],
-      )
-    ];
-    for (var category in Category.values) {
+    var rows = <TableRow>[];
+    for (var category in availableCategories()) {
       rows.add(TableRow(
         children: <Widget>[
           TableCell(
