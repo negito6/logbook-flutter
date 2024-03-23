@@ -148,7 +148,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return Tags(
             database: widget.database, tags: tags, histories: histories);
       case Screen.categoryTags:
-        return CategoryTags(category: currentCategory, tags: tags);
+        return CategoryTags(
+            database: widget.database, category: currentCategory, tags: tags);
       case Screen.tagHistories:
         return TagHistories(database: widget.database);
       default:
