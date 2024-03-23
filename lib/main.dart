@@ -99,8 +99,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void switchCategoryScreen(BuildContext context, Category category) {
     setState(() {
       currentCategory = category;
+      currentScreen = Screen.categoryTags;
+      tags = [];
     });
-    switchScreen(context, Screen.categoryTags);
+    Navigator.pop(context);
   }
 
   void switchScreen(BuildContext context, Screen screen) {
@@ -157,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return Tags(database: widget.database, datetime: now, tags: tags);
       case Screen.categoryTags:
         return CategoryTags(
-            database: widget.database, category: currentCategory, tags: tags);
+            database: widget.database, category: currentCategory);
       case Screen.tagHistories:
         return TagHistories(database: widget.database);
       default:

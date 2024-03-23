@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:logbook/models/tag.dart';
-import 'package:logbook/models/history.dart';
 import 'package:logbook/views/formats/datetime.dart';
 
 class MyCustomForm extends StatefulWidget {
@@ -84,21 +83,17 @@ class MyCustomFormState extends State<MyCustomForm> {
 
 class CategoryTags extends StatefulWidget {
   const CategoryTags(
-      {super.key,
-      required this.database,
-      required this.category,
-      required this.tags});
+      {super.key, required this.database, required this.category});
 
   final Database database;
   final Category category;
-  final List<Tag> tags;
 
   @override
   State<CategoryTags> createState() => CategoryTagsState();
 }
 
 class CategoryTagsState extends State<CategoryTags> {
-  List<History> histories = [];
+  List<Tag> tags = [];
 
   @override
   void initState() {
@@ -108,19 +103,19 @@ class CategoryTagsState extends State<CategoryTags> {
   }
 
   void reload() async {
-    getHistories(widget.database).then((result) {
+    getTags(widget.database).then((result) {
+      final target =
+          result.where((tag) => tag.category == widget.category.value).toList();
+      target.sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
       setState(() {
-        histories = result;
+        tags = target;
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final tags = widget.tags
-        .where((tag) => tag.category == widget.category.value)
-        .toList();
-    tags.sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
+    reload();
     var rows = <TableRow>[
       TableRow(
         children: <Widget>[
