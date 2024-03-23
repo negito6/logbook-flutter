@@ -59,8 +59,43 @@ class Tags extends StatelessWidget {
               child:
                   Text(tagHistories.isEmpty ? "" : tagHistories.first.doneAt()),
             ),
-            const TableCell(
-              child: Text("----"),
+            TableCell(
+              child: tagHistories.isEmpty
+                  ? ElevatedButton(
+                      onPressed: () async {
+                        await database.insert(
+                          'histories',
+                          {
+                            'tagId': tag.id,
+                            'description': "",
+                            'value': 0,
+                            'doneTimestamp':
+                                (DateTime.now().millisecondsSinceEpoch ~/ 1000),
+                            'createdTimestamp':
+                                (DateTime.now().millisecondsSinceEpoch ~/ 1000),
+                          },
+                          conflictAlgorithm: ConflictAlgorithm.replace,
+                        );
+                      },
+                      child: const Text('Done'),
+                    )
+                  : ElevatedButton(
+                      onPressed: () async {
+                        await database.update(
+                          'histories',
+                          {
+                            'deletedTimestamp':
+                                DateTime.now().millisecondsSinceEpoch / 1000,
+                          },
+                          // Ensure that the Dog has a matching id.
+                          where: 'id = ?',
+                          // Pass the Dog's id as a whereArg to prevent SQL injection.
+                          whereArgs: [tag.id],
+                          conflictAlgorithm: ConflictAlgorithm.replace,
+                        );
+                      },
+                      child: const Text('Delete'),
+                    ),
             ),
           ],
         ));
