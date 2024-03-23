@@ -115,11 +115,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 switchScreen(context, Screen.dailyHistories);
               }),
           ListTile(
-              title: Text(Screen.tagHistories.label),
-              onTap: () {
-                switchScreen(context, Screen.tagHistories);
-              }),
-          ListTile(
               title: Text(Screen.tags.label),
               onTap: () {
                 switchScreen(context, Screen.tags);
