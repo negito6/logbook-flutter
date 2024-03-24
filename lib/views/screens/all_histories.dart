@@ -41,20 +41,30 @@ class AllHistoriesState extends State<AllHistories> {
 
   @override
   Widget build(BuildContext context) {
-    return Table(
-      border: TableBorder.all(),
-      children: <TableRow>[
-        const TableRow(
-          children: <Widget>[
-            TableCell(child: Text("Tag")),
-            TableCell(child: Text("Done at")),
-            TableCell(child: Text("Value")),
-            TableCell(child: Text("Desc")),
-          ],
-        ),
-        ...histories.map((history) {
+    var rows = <TableRow>[
+      const TableRow(
+        children: <Widget>[
+          TableCell(child: Text("Tag")),
+          TableCell(child: Text("Value")),
+          TableCell(child: Text("Desc")),
+        ],
+      )
+    ];
+    final distinctDateStrs = [
+      ...{...histories.map((history) => history.doneOn())}
+    ];
+    for (var dateStr in distinctDateStrs) {
+      rows.add(TableRow(
+        children: <Widget>[
+          TableCell(child: Text(dateStr)),
+          const TableCell(child: Text("----")),
+          const TableCell(child: Text("----")),
+        ],
+      ));
+      for (var history in histories) {
+        if (history.doneOn() == dateStr) {
           final targetTags = tags.where((tag) => tag.id == history.tagId);
-          return TableRow(
+          rows.add(TableRow(
             decoration: BoxDecoration(
               color: history.notDeleted() ? Colors.white : Colors.grey,
             ),
@@ -63,13 +73,17 @@ class AllHistoriesState extends State<AllHistories> {
                 child:
                     Text(targetTags.isEmpty ? "No tag" : targetTags.first.name),
               ),
-              TableCell(child: Text(history.doneAt())),
               TableCell(child: Text(history.value.toString())),
               TableCell(child: Text(history.description)),
             ],
-          );
-        }),
-      ],
+          ));
+        }
+      }
+    }
+
+    return Table(
+      border: TableBorder.all(),
+      children: rows,
     );
   }
 }
