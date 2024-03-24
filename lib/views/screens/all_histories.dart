@@ -3,16 +3,16 @@ import 'package:sqflite/sqflite.dart';
 import 'package:logbook/models/tag.dart';
 import 'package:logbook/models/history.dart';
 
-class Histories extends StatefulWidget {
-  const Histories({super.key, required this.database});
+class AllHistories extends StatefulWidget {
+  const AllHistories({super.key, required this.database});
 
   final Database database;
 
   @override
-  State<Histories> createState() => HistoriesState();
+  State<AllHistories> createState() => AllHistoriesState();
 }
 
-class HistoriesState extends State<Histories> {
+class AllHistoriesState extends State<AllHistories> {
   List<History> histories = [];
   List<Tag> tags = [];
 
