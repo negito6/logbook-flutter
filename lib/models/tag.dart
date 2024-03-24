@@ -57,6 +57,18 @@ class Tag {
     }).label;
   }
 
+  List<String> csv() {
+    return [
+      id.toString(),
+      name,
+      category.toString(),
+      lot.toString(),
+      createdTimestamp.toString(),
+      updatedTimestamp.toString(),
+      (deletedTimestamp ?? 0).toString(),
+    ];
+  }
+
   static String createTagTableStatement() {
     return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER, lot INTEGER, createdTimestamp INTEGER, updatedTimestamp INTEGER, deletedTimestamp INTEGER NULL)';
   }

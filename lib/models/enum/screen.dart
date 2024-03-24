@@ -4,6 +4,7 @@ enum Screen {
   categoryTags("Category"),
   allHistories("All histories"),
   allTags("All Tags"),
+  dump("Dump"),
   deletedHistories("Deleted histories"),
   ;
 

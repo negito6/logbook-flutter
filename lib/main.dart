@@ -13,6 +13,7 @@ import 'package:logbook/views/screens/tags.dart';
 import 'package:logbook/views/screens/category_tags.dart';
 import 'package:logbook/views/screens/all_histories.dart';
 import 'package:logbook/views/screens/all_tags.dart';
+import 'package:logbook/views/screens/dump.dart';
 
 const appName = "Logbook";
 
@@ -162,6 +163,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     switchScreen(context, screen);
                   }))
               .toList(),
+          ListTile(
+              title: Text(Screen.dump.label),
+              onTap: () {
+                switchScreen(context, Screen.dump);
+              }),
         ],
       ),
     );
@@ -178,6 +184,8 @@ class _MyHomePageState extends State<MyHomePage> {
       case Screen.categoryTags:
         return CategoryTags(
             database: widget.database, category: currentCategory);
+      case Screen.dump:
+        return Dump(database: widget.database);
       default:
         return Center(
           child: Column(

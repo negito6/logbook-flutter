@@ -32,6 +32,18 @@ class History {
     return deletedTimestamp == null;
   }
 
+  List<String> csv() {
+    return [
+      id.toString(),
+      tagId.toString(),
+      description,
+      value.toString(),
+      doneTimestamp.toString(),
+      createdTimestamp.toString(),
+      (deletedTimestamp ?? 0).toString(),
+    ];
+  }
+
   static String createTagTableStatement() {
     return 'CREATE TABLE histories(id INTEGER PRIMARY KEY, tagId INTEGER, description TEXT, value INTEGER, doneTimestamp INTEGER, createdTimestamp INTEGER, deletedTimestamp INTEGER NULL)';
   }
