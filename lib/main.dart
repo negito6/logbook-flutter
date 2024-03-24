@@ -168,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
     switch (currentScreen) {
       case Screen.tags:
         return Tags(database: widget.database, datetime: now, tags: tags);
-      case Screen.histories:
+      case Screen.allHistories:
         return AllHistories(database: widget.database);
       case Screen.categoryTags:
         return CategoryTags(

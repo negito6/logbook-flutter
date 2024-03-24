@@ -2,7 +2,7 @@ enum Screen {
   tagHistories("Tag Histories"),
   tags("Tags"),
   categoryTags("Category"),
-  histories("All histories"),
+  allHistories("All histories"),
   deletedHistories("Deleted histories"),
   ;
 
