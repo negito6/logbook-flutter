@@ -70,6 +70,7 @@ Future<List<Tag>> getTags(Database db) async {
           'id': id as int,
           'name': name as String,
           'category': category as int,
+          'lot': lot as int,
           'createdTimestamp': createdTimestamp as int,
           'updatedTimestamp': updatedTimestamp as int,
         } in tagMaps)
@@ -77,7 +78,7 @@ Future<List<Tag>> getTags(Database db) async {
         id: id,
         name: name,
         category: category,
-        lot: 1,
+        lot: lot,
         createdTimestamp: createdTimestamp,
         updatedTimestamp: updatedTimestamp,
       ),

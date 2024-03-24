@@ -150,6 +150,9 @@ class CategoryTagsState extends State<CategoryTags> {
             child: Text(widget.category.label),
           ),
           const TableCell(
+            child: Text("Lot"),
+          ),
+          const TableCell(
             child: Text(""),
           ),
         ],
@@ -165,6 +168,9 @@ class CategoryTagsState extends State<CategoryTags> {
                   },
                   child: Text(tag.name),
                 ),
+              ),
+              TableCell(
+                child: Text(tag.lot.toString()),
               ),
               TableCell(
                 child: ElevatedButton(
