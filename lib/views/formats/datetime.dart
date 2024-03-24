@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 String dateStr(DateTime datetime) {
   return datetime.toString().substring(0, 10);
 }
@@ -12,6 +14,11 @@ String datetimeStr(int unixtimestamp) {
 
 int currentTimestamp() {
   return timestamp(DateTime.now());
+}
+
+int currentTimeInt() {
+  final now = DateTime.now();
+  return int.parse(DateFormat('HHmmss').format(now));
 }
 
 int timestamp(DateTime datetime) {
