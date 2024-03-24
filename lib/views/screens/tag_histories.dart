@@ -145,7 +145,7 @@ class TagHistoriesState extends State<TagHistories> {
                       });
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Updating $e')),
+                        SnackBar(content: Text('Error $e')),
                       );
                     }
                   }
