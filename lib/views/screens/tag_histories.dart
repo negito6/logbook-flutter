@@ -50,9 +50,6 @@ class TagHistoriesState extends State<TagHistories> {
             const TableCell(
               child: Text("----"),
             ),
-            const TableCell(
-              child: Text("----"),
-            ),
           ],
         ),
         const TableRow(
@@ -66,9 +63,6 @@ class TagHistoriesState extends State<TagHistories> {
             TableCell(
               child: Text("Desc"),
             ),
-            TableCell(
-              child: Text("Save"),
-            ),
           ],
         ),
         ...histories.map((history) {
@@ -81,30 +75,52 @@ class TagHistoriesState extends State<TagHistories> {
                 child: Text(history.doneAt()),
               ),
               TableCell(
-                child: Text(history.value.toString()),
-              ),
+                  child: TextFormField(
+                initialValue: history.value.toString(),
+                onChanged: (newValue) async {
+                  if (newValue != history.value) {
+                    try {
+                      final intValue = int.parse(newValue);
+                      await widget.database.update(
+                        'histories',
+                        {
+                          'value': intValue,
+                        },
+                        where: 'id = ?',
+                        whereArgs: [history.id],
+                        conflictAlgorithm: ConflictAlgorithm.replace,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Updating $newValue')),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Updating $e')),
+                      );
+                    }
+                  }
+                },
+              )),
               TableCell(
-                child: Text(history.description),
-              ),
-              TableCell(
-                child: ElevatedButton(
-                  onPressed: () async {
+                  child: TextFormField(
+                initialValue: history.description,
+                onChanged: (newValue) async {
+                  if (newValue != history.description) {
                     await widget.database.update(
                       'histories',
                       {
-                        'description': "",
-                        'value': 0,
+                        'description': newValue,
                       },
                       where: 'id = ?',
                       whereArgs: [history.id],
                       conflictAlgorithm: ConflictAlgorithm.replace,
                     );
-
-                    reload();
-                  },
-                  child: const Text('Clear'),
-                ),
-              ),
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Updating $newValue')),
+                    );
+                  }
+                },
+              )),
             ],
           );
         }),
