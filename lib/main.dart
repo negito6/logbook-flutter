@@ -154,11 +154,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     switchCategoryScreen(context, category);
                   }))
               .toList(),
-          ListTile(
-              title: Text(Screen.histories.label),
-              onTap: () {
-                switchScreen(context, Screen.histories);
-              }),
+          ...[Screen.allHistories]
+              .map((screen) => ListTile(
+                  title: Text(screen.label),
+                  onTap: () {
+                    switchScreen(context, screen);
+                  }))
+              .toList(),
         ],
       ),
     );
