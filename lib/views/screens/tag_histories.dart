@@ -39,6 +39,22 @@ class TagHistoriesState extends State<TagHistories> {
     return Table(
       border: TableBorder.all(),
       children: <TableRow>[
+        TableRow(
+          children: <Widget>[
+            TableCell(
+              child: Text(widget.tag.name),
+            ),
+            const TableCell(
+              child: Text("----"),
+            ),
+            const TableCell(
+              child: Text("----"),
+            ),
+            const TableCell(
+              child: Text("----"),
+            ),
+          ],
+        ),
         const TableRow(
           children: <Widget>[
             TableCell(

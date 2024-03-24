@@ -147,11 +147,19 @@ class TagsState extends State<Tags> {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          ElevatedButton(
-              onPressed: () async {
-                onPressedRaisedButton();
-              },
-              child: Text(dateStr(datetime))),
+          tags.isEmpty
+              ? ElevatedButton(
+                  onPressed: () async {
+                    onPressedRaisedButton();
+                  },
+                  child: Text(dateStr(datetime)))
+              : ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      tags = [];
+                    });
+                  },
+                  child: const Text('Back')),
           tags.isEmpty
               ? Table(
                   border: TableBorder.all(),
