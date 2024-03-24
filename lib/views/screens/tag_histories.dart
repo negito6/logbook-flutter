@@ -15,6 +15,9 @@ class TagHistories extends StatefulWidget {
 
 class TagHistoriesState extends State<TagHistories> {
   List<History> histories = [];
+  int editingHistoryId = 0;
+  int? editingValue;
+  String? editingDesc;
 
   @override
   void initState() {
@@ -47,13 +50,65 @@ class TagHistoriesState extends State<TagHistories> {
             const TableCell(
               child: Text("----"),
             ),
-            const TableCell(
-              child: Text("----"),
+            TableCell(
+              child: (editingHistoryId > 0 && editingValue != null)
+                  ? ElevatedButton(
+                      onPressed: () async {
+                        await widget.database.update(
+                          'histories',
+                          {
+                            'value': editingValue,
+                          },
+                          where: 'id = ?',
+                          whereArgs: [editingHistoryId],
+                          conflictAlgorithm: ConflictAlgorithm.replace,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text('Value updated to $editingValue')),
+                        );
+                        setState(() {
+                          editingValue = null;
+                        });
+                        reload();
+                      },
+                      child: Text("Save $editingHistoryId"),
+                    )
+                  : const Text("----"),
+            ),
+            TableCell(
+              child: (editingHistoryId > 0 && editingDesc != null)
+                  ? ElevatedButton(
+                      onPressed: () async {
+                        await widget.database.update(
+                          'histories',
+                          {
+                            'description': editingDesc,
+                          },
+                          where: 'id = ?',
+                          whereArgs: [editingHistoryId],
+                          conflictAlgorithm: ConflictAlgorithm.replace,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text('Desc updated to $editingDesc')),
+                        );
+                        setState(() {
+                          editingValue = null;
+                        });
+                        reload();
+                      },
+                      child: Text("Save $editingHistoryId"),
+                    )
+                  : const Text("----"),
             ),
           ],
         ),
         const TableRow(
           children: <Widget>[
+            TableCell(
+              child: Text("Id"),
+            ),
             TableCell(
               child: Text("Done at"),
             ),
@@ -72,6 +127,9 @@ class TagHistoriesState extends State<TagHistories> {
             ),
             children: <Widget>[
               TableCell(
+                child: Text(history.id.toString()),
+              ),
+              TableCell(
                 child: Text(history.doneAt()),
               ),
               TableCell(
@@ -81,18 +139,10 @@ class TagHistoriesState extends State<TagHistories> {
                   if (newValue != history.value) {
                     try {
                       final intValue = int.parse(newValue);
-                      await widget.database.update(
-                        'histories',
-                        {
-                          'value': intValue,
-                        },
-                        where: 'id = ?',
-                        whereArgs: [history.id],
-                        conflictAlgorithm: ConflictAlgorithm.replace,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Updating $newValue')),
-                      );
+                      setState(() {
+                        editingHistoryId = history.id == null ? 0 : history.id!;
+                        editingValue = intValue;
+                      });
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Updating $e')),
@@ -105,20 +155,10 @@ class TagHistoriesState extends State<TagHistories> {
                   child: TextFormField(
                 initialValue: history.description,
                 onChanged: (newValue) async {
-                  if (newValue != history.description) {
-                    await widget.database.update(
-                      'histories',
-                      {
-                        'description': newValue,
-                      },
-                      where: 'id = ?',
-                      whereArgs: [history.id],
-                      conflictAlgorithm: ConflictAlgorithm.replace,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Updating $newValue')),
-                    );
-                  }
+                  setState(() {
+                    editingHistoryId = history.id == null ? 0 : history.id!;
+                    editingDesc = newValue;
+                  });
                 },
               )),
             ],
