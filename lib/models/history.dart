@@ -45,20 +45,20 @@ Future<List<History>> getHistories(Database db) async {
   return [
     for (final {
           'id': id as int,
-          'tagId': tagId as int,
-          'description': description as String,
-          'value': value as int,
-          'doneTimestamp': doneTimestamp as int,
-          'createdTimestamp': createdTimestamp as int,
+          'tagId': tagId as int?,
+          'description': description as String?,
+          'value': value as int?,
+          'doneTimestamp': doneTimestamp as int?,
+          'createdTimestamp': createdTimestamp as int?,
           'deletedTimestamp': deletedTimestamp as int?,
         } in tagMaps)
       History(
         id: id,
-        tagId: tagId,
-        description: description,
-        value: value,
-        doneTimestamp: doneTimestamp,
-        createdTimestamp: createdTimestamp,
+        tagId: tagId ?? 1,
+        description: description ?? "",
+        value: value ?? 0,
+        doneTimestamp: doneTimestamp ?? 0,
+        createdTimestamp: createdTimestamp ?? 0,
         deletedTimestamp: deletedTimestamp,
       ),
   ];
