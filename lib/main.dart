@@ -12,6 +12,7 @@ import 'package:logbook/models/history.dart';
 import 'package:logbook/views/screens/tags.dart';
 import 'package:logbook/views/screens/category_tags.dart';
 import 'package:logbook/views/screens/all_histories.dart';
+import 'package:logbook/views/screens/all_tags.dart';
 
 const appName = "Logbook";
 
@@ -154,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     switchCategoryScreen(context, category);
                   }))
               .toList(),
-          ...[Screen.allHistories]
+          ...[Screen.allHistories, Screen.allTags]
               .map((screen) => ListTile(
                   title: Text(screen.label),
                   onTap: () {
@@ -172,6 +173,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return Tags(database: widget.database, datetime: now, tags: tags);
       case Screen.allHistories:
         return AllHistories(database: widget.database);
+      case Screen.allTags:
+        return AllTags(database: widget.database);
       case Screen.categoryTags:
         return CategoryTags(
             database: widget.database, category: currentCategory);

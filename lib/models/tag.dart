@@ -44,8 +44,8 @@ class Tag {
     this.deletedTimestamp,
   });
 
-  bool isDeleted() {
-    return deletedTimestamp != null;
+  bool notDeleted() {
+    return deletedTimestamp == null;
   }
 
   String label() {

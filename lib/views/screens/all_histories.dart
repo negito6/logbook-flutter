@@ -68,7 +68,8 @@ class AllHistoriesState extends State<AllHistories> {
             ),
             children: <Widget>[
               TableCell(
-                child: Text(targetTags.isEmpty ? "" : targetTags.first.name),
+                child:
+                    Text(targetTags.isEmpty ? "No tag" : targetTags.first.name),
               ),
               TableCell(
                 child: Text(history.doneAt()),
