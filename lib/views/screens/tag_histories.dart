@@ -136,7 +136,7 @@ class TagHistoriesState extends State<TagHistories> {
                   child: TextFormField(
                 initialValue: history.value.toString(),
                 onChanged: (newValue) async {
-                  if (newValue != history.value) {
+                  if (newValue != history.value.toString()) {
                     try {
                       final intValue = int.parse(newValue);
                       setState(() {
