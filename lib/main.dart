@@ -18,15 +18,6 @@ const appName = "Logbook";
 void main() async {
   final database = await init();
 
-  print('update');
-  await database.update(
-    'tags',
-    {
-      'lot': 1,
-    },
-    conflictAlgorithm: ConflictAlgorithm.replace,
-  );
-
   runApp(MyApp(database: database));
 }
 
