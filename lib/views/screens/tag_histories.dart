@@ -57,6 +57,9 @@ class TagHistoriesState extends State<TagHistories> {
         ),
         ...histories.map((history) {
           return TableRow(
+            decoration: BoxDecoration(
+              color: history.notDeleted() ? Colors.white : Colors.grey,
+            ),
             children: <Widget>[
               TableCell(
                 child: Text(history.doneAt()),
