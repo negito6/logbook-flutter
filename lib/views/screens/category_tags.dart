@@ -5,10 +5,11 @@ import 'package:logbook/views/formats/datetime.dart';
 
 class MyCustomForm extends StatefulWidget {
   const MyCustomForm(
-      {super.key, required this.category, required this.database});
+      {super.key, required this.category, required this.database, this.tag});
 
   final Database database;
   final Category category;
+  final Tag? tag;
 
   @override
   MyCustomFormState createState() {
@@ -20,8 +21,7 @@ class MyCustomForm extends StatefulWidget {
 // This class holds data related to the form.
 class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
-
-  final myController = TextEditingController();
+  var myController = TextEditingController(text: "");
 
   @override
   void dispose() {
@@ -32,52 +32,78 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFormField(
-            controller: myController,
-            // The validator receives the text that the user has entered.
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: ElevatedButton(
-              onPressed: () async {
-                // Validate returns true if the form is valid, or false otherwise.
-                if (_formKey.currentState!.validate()) {
-                  // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database.
-
-                  await widget.database.insert(
-                    'tags',
-                    {
-                      'name': myController.text,
-                      'category': widget.category.value,
-                      'createdTimestamp': currentTimestamp(),
-                      'updatedTimestamp': currentTimestamp(),
-                    },
-                    conflictAlgorithm: ConflictAlgorithm.replace,
-                  );
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
-                }
-              },
-              child: const Text('Submit'),
-            ),
-          ),
-        ],
+    return Column(children: <Widget>[
+      Text(widget.tag == null
+          ? "New"
+          : 'id = ${widget.tag!.id} ${widget.tag!.name}'),
+      ElevatedButton(
+        onPressed: () {
+          setState(() {
+            myController = TextEditingController(text: widget.tag?.name ?? "");
+          });
+        },
+        child: widget.tag == null ? const Text('Clear') : const Text('Load'),
       ),
-    );
+      Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: myController,
+              // The validator receives the text that the user has entered.
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: ElevatedButton(
+                onPressed: () async {
+                  // Validate returns true if the form is valid, or false otherwise.
+                  if (_formKey.currentState!.validate()) {
+                    // If the form is valid, display a snackbar. In the real world,
+                    // you'd often call a server or save the information in a database.
+
+                    if (widget.tag == null) {
+                      await widget.database.insert(
+                        'tags',
+                        {
+                          'name': myController.text,
+                          'category': widget.category.value,
+                          'createdTimestamp': currentTimestamp(),
+                          'updatedTimestamp': currentTimestamp(),
+                        },
+                        conflictAlgorithm: ConflictAlgorithm.replace,
+                      );
+                    } else {
+                      await widget.database.update(
+                        'tags',
+                        {
+                          'name': myController.text,
+                          'updatedTimestamp': currentTimestamp(),
+                        },
+                        where: 'id = ?',
+                        whereArgs: [widget.tag!.id!],
+                        conflictAlgorithm: ConflictAlgorithm.replace,
+                      );
+                    }
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('OK')),
+                    );
+                  }
+                },
+                child: const Text('Submit'),
+              ),
+            ),
+          ],
+        ),
+      )
+    ]);
   }
 }
 
@@ -94,6 +120,7 @@ class CategoryTags extends StatefulWidget {
 
 class CategoryTagsState extends State<CategoryTags> {
   List<Tag> tags = [];
+  Tag? targetTag;
 
   @override
   void initState() {
@@ -130,7 +157,14 @@ class CategoryTagsState extends State<CategoryTags> {
       ...tags.map((tag) => TableRow(
             children: <Widget>[
               TableCell(
-                child: Text(tag.name),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      targetTag = tag;
+                    });
+                  },
+                  child: Text(tag.name),
+                ),
               ),
               TableCell(
                 child: ElevatedButton(
@@ -156,7 +190,8 @@ class CategoryTagsState extends State<CategoryTags> {
     ];
 
     return Column(children: [
-      MyCustomForm(database: widget.database, category: widget.category),
+      MyCustomForm(
+          database: widget.database, category: widget.category, tag: targetTag),
       Table(
         border: TableBorder.all(),
         children: rows,
