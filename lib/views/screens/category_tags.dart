@@ -152,65 +152,76 @@ class CategoryTagsState extends State<CategoryTags> {
           const TableCell(child: Text("")),
         ],
       ),
-      ...tags.map((tag) => TableRow(
-            children: <Widget>[
-              TableCell(
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      targetTag = tag;
-                    });
-                  },
-                  child: Text(tag.name),
-                ),
-              ),
-              TableCell(
-                  child: TextFormField(
-                initialValue: tag.lot.toString(),
-                onChanged: (newValue) async {
-                  try {
-                    final intValue = int.parse(newValue);
-                    await widget.database.update(
-                      'tags',
-                      {
-                        'lot': intValue,
-                      },
-                      // Ensure that the Dog has a matching id.
-                      where: 'id = ?',
-                      // Pass the Dog's id as a whereArg to prevent SQL injection.
-                      whereArgs: [tag.id],
-                      conflictAlgorithm: ConflictAlgorithm.replace,
-                    );
-                    reload();
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error $e')),
-                    );
-                  }
-                },
-              )),
-              TableCell(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await widget.database.update(
-                      'tags',
-                      {
-                        'updatedTimestamp': currentTimestamp(),
-                      },
-                      // Ensure that the Dog has a matching id.
-                      where: 'id = ?',
-                      // Pass the Dog's id as a whereArg to prevent SQL injection.
-                      whereArgs: [tag.id],
-                      conflictAlgorithm: ConflictAlgorithm.replace,
-                    );
-                    reload();
-                  },
-                  child: const Text('To top'),
-                ),
-              ),
-            ],
-          )),
     ];
+
+    tags.sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
+    final distinctLots = [
+      ...{...tags.map((tag) => tag.lot)}
+    ];
+    distinctLots.sort((a, b) => a.compareTo(b));
+    for (var lot in distinctLots) {
+      final tagsOnLot = tags.where((tag) => tag.lot == lot);
+      for (var tag in tagsOnLot) {
+        rows.add(TableRow(
+          children: <Widget>[
+            TableCell(
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    targetTag = tag;
+                  });
+                },
+                child: Text(tag.name),
+              ),
+            ),
+            TableCell(
+                child: TextFormField(
+              initialValue: tag.lot.toString(),
+              onChanged: (newValue) async {
+                try {
+                  final intValue = int.parse(newValue);
+                  await widget.database.update(
+                    'tags',
+                    {
+                      'lot': intValue,
+                    },
+                    // Ensure that the Dog has a matching id.
+                    where: 'id = ?',
+                    // Pass the Dog's id as a whereArg to prevent SQL injection.
+                    whereArgs: [tag.id],
+                    conflictAlgorithm: ConflictAlgorithm.replace,
+                  );
+                  reload();
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error $e')),
+                  );
+                }
+              },
+            )),
+            TableCell(
+              child: ElevatedButton(
+                onPressed: () async {
+                  await widget.database.update(
+                    'tags',
+                    {
+                      'updatedTimestamp': currentTimestamp(),
+                    },
+                    // Ensure that the Dog has a matching id.
+                    where: 'id = ?',
+                    // Pass the Dog's id as a whereArg to prevent SQL injection.
+                    whereArgs: [tag.id],
+                    conflictAlgorithm: ConflictAlgorithm.replace,
+                  );
+                  reload();
+                },
+                child: const Text('To top'),
+              ),
+            ),
+          ],
+        ));
+      }
+    }
 
     return Column(children: [
       MyCustomForm(

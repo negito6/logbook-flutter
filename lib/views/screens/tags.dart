@@ -181,63 +181,74 @@ class TagsState extends State<Tags> {
       tagCategories
           .sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
       if (currentValue > 0) {
-        for (var tag in tagCategories) {
-          final tagHistoriesOnDateAndValue = histories.where((history) =>
-              history.tagId == tag.id &&
-              history.notDeleted() &&
-              history.doneOn() == dateStr(datetime) &&
-              history.value == currentValue);
-          rows.add(TableRow(
-            children: <Widget>[
-              TableCell(child: Text(tag.name)),
-              TableCell(
-                  child: tagHistoriesOnDateAndValue.isEmpty
-                      ? const Text("")
-                      : ElevatedButton(
-                          onPressed: () async {
-                            await widget.database.update(
-                              'histories',
-                              {
-                                'deletedTimestamp': currentTimestamp(),
-                              },
-                              // Ensure that the Dog has a matching id.
-                              where: 'id = ?',
-                              // Pass the Dog's id as a whereArg to prevent SQL injection.
-                              whereArgs: [tagHistoriesOnDateAndValue.first.id],
-                              conflictAlgorithm: ConflictAlgorithm.replace,
-                            );
-                            reload();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Deleted ${tag.name}')),
-                            );
-                          },
-                          child: const Text('Delete'),
-                        )),
-              TableCell(
-                  child: tagHistoriesOnDateAndValue.isEmpty
-                      ? ElevatedButton(
-                          onPressed: () async {
-                            await widget.database.insert(
-                              'histories',
-                              {
-                                'tagId': tag.id,
-                                'description': "",
-                                'value': currentValue,
-                                'doneTimestamp': timestamp(datetime),
-                                'createdTimestamp': currentTimestamp(),
-                              },
-                              conflictAlgorithm: ConflictAlgorithm.replace,
-                            );
-                            reload();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Created ${tag.name}')),
-                            );
-                          },
-                          child: Text(currentValue.toString()),
-                        )
-                      : const Text("")),
-            ],
-          ));
+        final distinctLots = [
+          ...{...tagCategories.map((tag) => tag.lot)}
+        ];
+        distinctLots.sort((a, b) => a.compareTo(b));
+        tagCategories
+            .sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
+        for (var lot in distinctLots) {
+          final tagCategoryOnLot = tagCategories.where((tag) => tag.lot == lot);
+          for (var tag in tagCategoryOnLot) {
+            final tagHistoriesOnDateAndValue = histories.where((history) =>
+                history.tagId == tag.id &&
+                history.notDeleted() &&
+                history.doneOn() == dateStr(datetime) &&
+                history.value == currentValue);
+            rows.add(TableRow(
+              children: <Widget>[
+                TableCell(child: Text(tag.name)),
+                TableCell(
+                    child: tagHistoriesOnDateAndValue.isEmpty
+                        ? const Text("")
+                        : ElevatedButton(
+                            onPressed: () async {
+                              await widget.database.update(
+                                'histories',
+                                {
+                                  'deletedTimestamp': currentTimestamp(),
+                                },
+                                // Ensure that the Dog has a matching id.
+                                where: 'id = ?',
+                                // Pass the Dog's id as a whereArg to prevent SQL injection.
+                                whereArgs: [
+                                  tagHistoriesOnDateAndValue.first.id
+                                ],
+                                conflictAlgorithm: ConflictAlgorithm.replace,
+                              );
+                              reload();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Deleted ${tag.name}')),
+                              );
+                            },
+                            child: const Text('Delete'),
+                          )),
+                TableCell(
+                    child: tagHistoriesOnDateAndValue.isEmpty
+                        ? ElevatedButton(
+                            onPressed: () async {
+                              await widget.database.insert(
+                                'histories',
+                                {
+                                  'tagId': tag.id,
+                                  'description': "",
+                                  'value': currentValue,
+                                  'doneTimestamp': timestamp(datetime),
+                                  'createdTimestamp': currentTimestamp(),
+                                },
+                                conflictAlgorithm: ConflictAlgorithm.replace,
+                              );
+                              reload();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Created ${tag.name}')),
+                              );
+                            },
+                            child: Text(currentValue.toString()),
+                          )
+                        : const Text("")),
+              ],
+            ));
+          }
         }
       }
       if (currentValue == 0 && visibleValueGroupTags) {
@@ -273,78 +284,86 @@ class TagsState extends State<Tags> {
 
         final tagCategories =
             widget.tags.where((tag) => tag.category == category.value).toList();
+        final distinctLots = [
+          ...{...tagCategories.map((tag) => tag.lot)}
+        ];
+        distinctLots.sort((a, b) => a.compareTo(b));
         tagCategories
             .sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
-        for (var tag in tagCategories) {
-          final tagHistories = histories.where(
-              (history) => history.tagId == tag.id && history.notDeleted());
-          final tagHistoriesOnDate = tagHistories
-              .where((history) => history.doneOn() == dateStr(datetime));
+        for (var lot in distinctLots) {
+          final tagCategoryOnLot = tagCategories.where((tag) => tag.lot == lot);
+          for (var tag in tagCategoryOnLot) {
+            final tagHistories = histories.where(
+                (history) => history.tagId == tag.id && history.notDeleted());
+            final tagHistoriesOnDate = tagHistories
+                .where((history) => history.doneOn() == dateStr(datetime));
 
-          rows.add(TableRow(
-            children: <Widget>[
-              TableCell(
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      tags = [tag];
-                    });
-                  },
-                  child: Text(tag.name),
+            rows.add(TableRow(
+              children: <Widget>[
+                TableCell(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        tags = [tag];
+                      });
+                    },
+                    child: Text(tag.name),
+                  ),
                 ),
-              ),
-              TableCell(
-                  child: tagHistories.isEmpty
-                      ? const Text("----")
-                      : (tagHistoriesOnDate.isEmpty
-                          ? Text(tagHistories.first.doneOn()) // old or new
-                          : ElevatedButton(
-                              onPressed: () async {
-                                await widget.database.update(
-                                  'histories',
-                                  {
-                                    'deletedTimestamp': currentTimestamp(),
-                                  },
-                                  // Ensure that the Dog has a matching id.
-                                  where: 'id = ?',
-                                  // Pass the Dog's id as a whereArg to prevent SQL injection.
-                                  whereArgs: [tagHistoriesOnDate.first.id],
-                                  conflictAlgorithm: ConflictAlgorithm.replace,
-                                );
-                                reload();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Deleted ${tag.name}')),
-                                );
+                TableCell(
+                    child: tagHistories.isEmpty
+                        ? const Text("----")
+                        : (tagHistoriesOnDate.isEmpty
+                            ? Text(tagHistories.first.doneOn()) // old or new
+                            : ElevatedButton(
+                                onPressed: () async {
+                                  await widget.database.update(
+                                    'histories',
+                                    {
+                                      'deletedTimestamp': currentTimestamp(),
+                                    },
+                                    // Ensure that the Dog has a matching id.
+                                    where: 'id = ?',
+                                    // Pass the Dog's id as a whereArg to prevent SQL injection.
+                                    whereArgs: [tagHistoriesOnDate.first.id],
+                                    conflictAlgorithm:
+                                        ConflictAlgorithm.replace,
+                                  );
+                                  reload();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text('Deleted ${tag.name}')),
+                                  );
+                                },
+                                child: const Text('Delete'),
+                              ))),
+                TableCell(
+                  child: tagHistoriesOnDate.isEmpty
+                      ? ElevatedButton(
+                          onPressed: () async {
+                            await widget.database.insert(
+                              'histories',
+                              {
+                                'tagId': tag.id,
+                                'description': "",
+                                'value': 0,
+                                'doneTimestamp': timestamp(datetime),
+                                'createdTimestamp': currentTimestamp(),
                               },
-                              child: const Text('Delete'),
-                            ))),
-              TableCell(
-                child: tagHistoriesOnDate.isEmpty
-                    ? ElevatedButton(
-                        onPressed: () async {
-                          await widget.database.insert(
-                            'histories',
-                            {
-                              'tagId': tag.id,
-                              'description': "",
-                              'value': 0,
-                              'doneTimestamp': timestamp(datetime),
-                              'createdTimestamp': currentTimestamp(),
-                            },
-                            conflictAlgorithm: ConflictAlgorithm.replace,
-                          );
-                          reload();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Created ${tag.name}')),
-                          );
-                        },
-                        child: Text(dateStr(datetime)),
-                      )
-                    : Text(tagHistoriesOnDate.first.description),
-              ),
-            ],
-          ));
+                              conflictAlgorithm: ConflictAlgorithm.replace,
+                            );
+                            reload();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Created ${tag.name}')),
+                            );
+                          },
+                          child: Text(dateStr(datetime)),
+                        )
+                      : Text(tagHistoriesOnDate.first.description),
+                ),
+              ],
+            ));
+          }
         }
       }
     }
