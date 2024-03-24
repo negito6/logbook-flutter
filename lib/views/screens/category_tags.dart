@@ -171,8 +171,30 @@ class CategoryTagsState extends State<CategoryTags> {
                 ),
               ),
               TableCell(
-                child: Text(tag.lot.toString()),
-              ),
+                  child: TextFormField(
+                initialValue: tag.lot.toString(),
+                onChanged: (newValue) async {
+                  try {
+                    final intValue = int.parse(newValue);
+                    await widget.database.update(
+                      'tags',
+                      {
+                        'lot': intValue,
+                      },
+                      // Ensure that the Dog has a matching id.
+                      where: 'id = ?',
+                      // Pass the Dog's id as a whereArg to prevent SQL injection.
+                      whereArgs: [tag.id],
+                      conflictAlgorithm: ConflictAlgorithm.replace,
+                    );
+                    reload();
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error $e')),
+                    );
+                  }
+                },
+              )),
               TableCell(
                 child: ElevatedButton(
                   onPressed: () async {
