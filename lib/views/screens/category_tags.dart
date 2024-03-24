@@ -74,6 +74,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                         {
                           'name': myController.text,
                           'category': widget.category.value,
+                          'lot': 1,
                           'createdTimestamp': currentTimestamp(),
                           'updatedTimestamp': currentTimestamp(),
                         },

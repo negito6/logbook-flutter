@@ -68,19 +68,19 @@ Future<List<Tag>> getTags(Database db) async {
   return [
     for (final {
           'id': id as int,
-          'name': name as String,
-          'category': category as int,
-          'lot': lot as int,
-          'createdTimestamp': createdTimestamp as int,
-          'updatedTimestamp': updatedTimestamp as int,
+          'name': name as String?,
+          'category': category as int?,
+          'lot': lot as int?,
+          'createdTimestamp': createdTimestamp as int?,
+          'updatedTimestamp': updatedTimestamp as int?,
         } in tagMaps)
       Tag(
         id: id,
-        name: name,
-        category: category,
-        lot: lot,
-        createdTimestamp: createdTimestamp,
-        updatedTimestamp: updatedTimestamp,
+        name: name || 'No name',
+        category: category ?? 0,
+        lot: lot ?? 0,
+        createdTimestamp: createdTimestamp ?? 0,
+        updatedTimestamp: updatedTimestamp ?? 0,
       ),
   ];
 }
