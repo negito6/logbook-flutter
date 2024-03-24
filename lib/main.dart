@@ -131,7 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
       case Screen.tags:
         loadTags();
       default:
-        return;
     }
     Navigator.pop(context);
   }
