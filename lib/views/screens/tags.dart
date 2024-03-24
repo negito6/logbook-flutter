@@ -127,9 +127,27 @@ class TagsState extends State<Tags> {
               ),
             ),
             TableCell(
-              child:
-                  Text(tagHistories.isEmpty ? "" : tagHistories.first.doneOn()),
-            ),
+                child: tagHistories.isEmpty
+                    ? const Text("----")
+                    : (tagHistoriesOnDate.isEmpty
+                        ? Text(tagHistories.first.doneOn()) // old or new
+                        : ElevatedButton(
+                            onPressed: () async {
+                              await widget.database.update(
+                                'histories',
+                                {
+                                  'deletedTimestamp': currentTimestamp(),
+                                },
+                                // Ensure that the Dog has a matching id.
+                                where: 'id = ?',
+                                // Pass the Dog's id as a whereArg to prevent SQL injection.
+                                whereArgs: [tagHistoriesOnDate.first.id],
+                                conflictAlgorithm: ConflictAlgorithm.replace,
+                              );
+                              reload();
+                            },
+                            child: const Text('Delete'),
+                          ))),
             TableCell(
               child: tagHistoriesOnDate.isEmpty
                   ? ElevatedButton(
@@ -147,25 +165,9 @@ class TagsState extends State<Tags> {
                         );
                         reload();
                       },
-                      child: const Text('Done'),
+                      child: Text(dateStr(datetime)),
                     )
-                  : ElevatedButton(
-                      onPressed: () async {
-                        await widget.database.update(
-                          'histories',
-                          {
-                            'deletedTimestamp': currentTimestamp(),
-                          },
-                          // Ensure that the Dog has a matching id.
-                          where: 'id = ?',
-                          // Pass the Dog's id as a whereArg to prevent SQL injection.
-                          whereArgs: [tagHistoriesOnDate.first.id],
-                          conflictAlgorithm: ConflictAlgorithm.replace,
-                        );
-                        reload();
-                      },
-                      child: const Text('Delete'),
-                    ),
+                  : Text(tagHistoriesOnDate.first.description),
             ),
           ],
         ));
