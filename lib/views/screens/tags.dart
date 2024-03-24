@@ -292,6 +292,14 @@ class TagsState extends State<Tags> {
             .sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
         for (var lot in distinctLots) {
           final tagCategoryOnLot = tagCategories.where((tag) => tag.lot == lot);
+          rows.add(TableRow(
+            children: <Widget>[
+              const TableCell(child: Text("----")),
+              TableCell(child: Text(lot.toString())),
+              const TableCell(child: Text("----")),
+            ],
+          ));
+
           for (var tag in tagCategoryOnLot) {
             final tagHistories = histories.where(
                 (history) => history.tagId == tag.id && history.notDeleted());
