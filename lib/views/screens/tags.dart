@@ -25,6 +25,7 @@ class TagsState extends State<Tags> {
   List<History> histories = [];
   List<Tag> tags = [];
   int currentValue = 0;
+  bool visibleValueGroupTags = false;
 
   void onPressedRaisedButton() async {
     final DateTime? picked = await showDatePicker(
@@ -144,7 +145,18 @@ class TagsState extends State<Tags> {
         ]));
       }
       rows.add(TableRow(children: <Widget>[
-        const TableCell(child: Text("----")),
+        TableCell(
+          child: currentValue == 0
+              ? ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      visibleValueGroupTags = !visibleValueGroupTags;
+                    });
+                  },
+                  child: Text(visibleValueGroupTags ? "Hide" : "Show"),
+                )
+              : const Text("----"),
+        ),
         const TableCell(child: Text("----")),
         TableCell(
           child: currentValue == 0
@@ -166,9 +178,9 @@ class TagsState extends State<Tags> {
                 ),
         ),
       ]));
+      tagCategories
+          .sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
       if (currentValue > 0) {
-        tagCategories
-            .sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
         for (var tag in tagCategories) {
           final tagHistoriesOnDateAndValue = histories.where((history) =>
               history.tagId == tag.id &&
@@ -226,6 +238,26 @@ class TagsState extends State<Tags> {
                           child: Text(currentValue.toString()),
                         )
                       : const Text("")),
+            ],
+          ));
+        }
+      }
+      if (currentValue == 0 && visibleValueGroupTags) {
+        for (var tag in tagCategories) {
+          rows.add(TableRow(
+            children: <Widget>[
+              TableCell(
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      tags = [tag];
+                    });
+                  },
+                  child: Text(tag.name),
+                ),
+              ),
+              const TableCell(child: Text("")),
+              const TableCell(child: Text("")),
             ],
           ));
         }
