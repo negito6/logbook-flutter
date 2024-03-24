@@ -44,12 +44,8 @@ class TagHistoriesState extends State<TagHistories> {
       children: <TableRow>[
         TableRow(
           children: <Widget>[
-            TableCell(
-              child: Text(widget.tag.name),
-            ),
-            const TableCell(
-              child: Text("----"),
-            ),
+            TableCell(child: Text(widget.tag.name)),
+            const TableCell(child: Text("----")),
             TableCell(
               child: (editingHistoryId > 0 && editingValue != null)
                   ? ElevatedButton(
@@ -106,18 +102,10 @@ class TagHistoriesState extends State<TagHistories> {
         ),
         const TableRow(
           children: <Widget>[
-            TableCell(
-              child: Text("Id"),
-            ),
-            TableCell(
-              child: Text("Done at"),
-            ),
-            TableCell(
-              child: Text("Value"),
-            ),
-            TableCell(
-              child: Text("Desc"),
-            ),
+            TableCell(child: Text("Id")),
+            TableCell(child: Text("Done at")),
+            TableCell(child: Text("Value")),
+            TableCell(child: Text("Desc")),
           ],
         ),
         ...histories.map((history) {
@@ -126,12 +114,8 @@ class TagHistoriesState extends State<TagHistories> {
               color: history.notDeleted() ? Colors.white : Colors.grey,
             ),
             children: <Widget>[
-              TableCell(
-                child: Text(history.id.toString()),
-              ),
-              TableCell(
-                child: Text(history.doneAt()),
-              ),
+              TableCell(child: Text(history.id.toString())),
+              TableCell(child: Text(history.doneAt())),
               TableCell(
                   child: TextFormField(
                 initialValue: history.value.toString(),

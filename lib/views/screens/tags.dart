@@ -189,9 +189,7 @@ class TagsState extends State<Tags> {
               history.value == currentValue);
           rows.add(TableRow(
             children: <Widget>[
-              TableCell(
-                child: Text(tag.name),
-              ),
+              TableCell(child: Text(tag.name)),
               TableCell(
                   child: tagHistoriesOnDateAndValue.isEmpty
                       ? const Text("")

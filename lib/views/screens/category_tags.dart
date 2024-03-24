@@ -147,15 +147,9 @@ class CategoryTagsState extends State<CategoryTags> {
     var rows = <TableRow>[
       TableRow(
         children: <Widget>[
-          TableCell(
-            child: Text(widget.category.label),
-          ),
-          const TableCell(
-            child: Text("Lot"),
-          ),
-          const TableCell(
-            child: Text(""),
-          ),
+          TableCell(child: Text(widget.category.label)),
+          const TableCell(child: Text("Lot")),
+          const TableCell(child: Text("")),
         ],
       ),
       ...tags.map((tag) => TableRow(

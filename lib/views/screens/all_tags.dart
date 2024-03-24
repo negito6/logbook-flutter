@@ -38,21 +38,11 @@ class AllTagsState extends State<AllTags> {
       children: <TableRow>[
         const TableRow(
           children: <Widget>[
-            TableCell(
-              child: Text("Id"),
-            ),
-            TableCell(
-              child: Text("Tag"),
-            ),
-            TableCell(
-              child: Text("Category"),
-            ),
-            TableCell(
-              child: Text("Lot"),
-            ),
-            TableCell(
-              child: Text("----"),
-            ),
+            TableCell(child: Text("Id")),
+            TableCell(child: Text("Tag")),
+            TableCell(child: Text("Category")),
+            TableCell(child: Text("Lot")),
+            TableCell(child: Text("----")),
           ],
         ),
         ...tags.map((tag) {
@@ -63,20 +53,14 @@ class AllTagsState extends State<AllTags> {
               color: tag.notDeleted() ? Colors.white : Colors.grey,
             ),
             children: <Widget>[
-              TableCell(
-                child: Text(tag.id.toString()),
-              ),
-              TableCell(
-                child: Text(tag.name),
-              ),
+              TableCell(child: Text(tag.id.toString())),
+              TableCell(child: Text(tag.name)),
               TableCell(
                 child: Text(categories.isEmpty
                     ? '(${tag.category.toString()} ?)'
                     : categories.first.label),
               ),
-              TableCell(
-                child: Text(tag.lot.toString()),
-              ),
+              TableCell(child: Text(tag.lot.toString())),
               TableCell(
                 child: ElevatedButton(
                   onPressed: () async {

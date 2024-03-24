@@ -46,18 +46,10 @@ class AllHistoriesState extends State<AllHistories> {
       children: <TableRow>[
         const TableRow(
           children: <Widget>[
-            TableCell(
-              child: Text("Tag"),
-            ),
-            TableCell(
-              child: Text("Done at"),
-            ),
-            TableCell(
-              child: Text("Value"),
-            ),
-            TableCell(
-              child: Text("Desc"),
-            ),
+            TableCell(child: Text("Tag")),
+            TableCell(child: Text("Done at")),
+            TableCell(child: Text("Value")),
+            TableCell(child: Text("Desc")),
           ],
         ),
         ...histories.map((history) {
@@ -71,15 +63,9 @@ class AllHistoriesState extends State<AllHistories> {
                 child:
                     Text(targetTags.isEmpty ? "No tag" : targetTags.first.name),
               ),
-              TableCell(
-                child: Text(history.doneAt()),
-              ),
-              TableCell(
-                child: Text(history.value.toString()),
-              ),
-              TableCell(
-                child: Text(history.description),
-              ),
+              TableCell(child: Text(history.doneAt())),
+              TableCell(child: Text(history.value.toString())),
+              TableCell(child: Text(history.description)),
             ],
           );
         }),
