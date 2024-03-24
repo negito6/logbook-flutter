@@ -7,6 +7,7 @@ enum Category {
   wash("Wash", 3),
   clean("Clean", 4),
   act("Act", 5),
+  item("Item", 6),
   ;
 
   const Category(this.label, this.value);
@@ -21,7 +22,8 @@ List<Category> availableCategories() {
     Category.food,
     Category.wash,
     Category.clean,
-    Category.act
+    Category.act,
+    Category.item,
   ];
 }
 
