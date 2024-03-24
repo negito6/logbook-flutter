@@ -29,6 +29,7 @@ class Tag {
   final int? id;
   final String name;
   final int category;
+  final int lot;
   final int createdTimestamp;
   final int updatedTimestamp;
   int? deletedTimestamp;
@@ -37,6 +38,7 @@ class Tag {
     this.id,
     required this.name,
     required this.category,
+    required this.lot,
     required this.createdTimestamp,
     required this.updatedTimestamp,
     this.deletedTimestamp,
@@ -54,7 +56,7 @@ class Tag {
   }
 
   static String createTagTableStatement() {
-    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER, createdTimestamp INTEGER, updatedTimestamp INTEGER, deletedTimestamp INTEGER NULL)';
+    return 'CREATE TABLE tags(id INTEGER PRIMARY KEY, name TEXT, category INTEGER, lot INTEGER, createdTimestamp INTEGER, updatedTimestamp INTEGER, deletedTimestamp INTEGER NULL)';
   }
 }
 
@@ -75,6 +77,7 @@ Future<List<Tag>> getTags(Database db) async {
         id: id,
         name: name,
         category: category,
+        lot: 1,
         createdTimestamp: createdTimestamp,
         updatedTimestamp: updatedTimestamp,
       ),

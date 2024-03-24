@@ -18,8 +18,14 @@ const appName = "Logbook";
 void main() async {
   final database = await init();
 
-  print('alter table');
-  await database.execute('alter table tags add column lot integer after category');
+  print('update');
+  await database.update(
+    'tags',
+    {
+      'lot': 1,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
+  );
 
   runApp(MyApp(database: database));
 }
