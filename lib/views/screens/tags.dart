@@ -157,7 +157,6 @@ class TagsState extends State<Tags> {
                 )
               : const Text("----"),
         ),
-        const TableCell(child: Text("----")),
         TableCell(
           child: currentValue == 0
               ? ElevatedButton(
@@ -177,6 +176,7 @@ class TagsState extends State<Tags> {
                   child: const Text("Back"),
                 ),
         ),
+        const TableCell(child: Text("----")),
       ]));
       tagCategories
           .sort((a, b) => b.updatedTimestamp.compareTo(a.updatedTimestamp));
