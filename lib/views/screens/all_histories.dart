@@ -55,6 +55,7 @@ class AllHistoriesState extends State<AllHistories> {
     ];
     for (var dateStr in distinctDateStrs) {
       rows.add(TableRow(
+        decoration: BoxDecoration(color: Colors.yellow),
         children: <Widget>[
           TableCell(child: Text(dateStr)),
           const TableCell(child: Text("----")),

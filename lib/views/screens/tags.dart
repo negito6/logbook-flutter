@@ -63,6 +63,7 @@ class TagsState extends State<Tags> {
 
   TableRow categoryHeaderRow(Category category) {
     return TableRow(
+      decoration: BoxDecoration(color: Colors.yellow),
       children: <Widget>[
         TableCell(
           child: Text(category.label),
