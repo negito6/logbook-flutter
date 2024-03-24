@@ -188,7 +188,7 @@ class CategoryTagsState extends State<CategoryTags> {
                     );
                     reload();
                   },
-                  child: const Text('Update'),
+                  child: const Text('To top'),
                 ),
               ),
             ],
